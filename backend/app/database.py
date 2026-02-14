@@ -20,7 +20,7 @@ def get_supabase_client() -> Client:
     global _client
     if _client is None:
         settings = get_settings()
-        url = settings.supabase_url
+        url = (settings.supabase_url or "").rstrip("/")
         key = settings.supabase_service_role_key or settings.supabase_key
         if not url or not key:
             raise ValueError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set")
