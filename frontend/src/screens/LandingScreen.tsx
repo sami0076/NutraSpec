@@ -1,0 +1,23 @@
+import { Navbar } from '@/components/landing/Navbar'
+import { Hero } from '@/components/landing/Hero'
+import { About } from '@/components/landing/About'
+import { Features } from '@/components/landing/Features'
+import { HowItWorks } from '@/components/landing/HowItWorks'
+import { TechStack } from '@/components/landing/TechStack'
+import { CTA } from '@/components/landing/CTA'
+import { Footer } from '@/components/landing/Footer'
+
+export default function LandingScreen() {
+  return (
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <Hero />
+      <About />
+      <Features />
+      <HowItWorks />
+      <TechStack />
+      <CTA />
+      <Footer />
+    </div>
+  )
+}

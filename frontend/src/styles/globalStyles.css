@@ -1,15 +1,137 @@
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display&display=swap");
+@import "tailwindcss";
+
+/* Source paths for Tailwind to scan */
+@source "../../src/**/*.{js,ts,jsx,tsx}";
+
+/* ============================================
+   FoodFinder.AI Theme — White & Orange
+   ============================================ */
+
+@theme {
+  /* Color palette */
+  --color-background: hsl(30 25% 98%);
+  --color-foreground: hsl(20 15% 15%);
+
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(20 15% 15%);
+
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(20 15% 15%);
+
+  /* Primary: vibrant orange */
+  --color-primary: hsl(24 95% 53%);
+  --color-primary-foreground: hsl(0 0% 100%);
+
+  --color-secondary: hsl(30 15% 95%);
+  --color-secondary-foreground: hsl(20 15% 15%);
+
+  --color-muted: hsl(30 10% 93%);
+  --color-muted-foreground: hsl(20 5% 45%);
+
+  --color-accent: hsl(24 95% 53%);
+  --color-accent-foreground: hsl(0 0% 100%);
+
+  --color-destructive: hsl(0 84% 60%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  --color-warning: hsl(38 92% 50%);
+  --color-warning-foreground: hsl(20 15% 15%);
+
+  --color-success: hsl(142 71% 45%);
+  --color-success-foreground: hsl(0 0% 100%);
+
+  --color-border: hsl(30 10% 88%);
+  --color-input: hsl(30 10% 88%);
+  --color-ring: hsl(24 95% 53%);
+
+  /* Border radius */
+  --radius: 0.75rem;
+  --radius-lg: 0.75rem;
+  --radius-md: calc(0.75rem - 2px);
+  --radius-sm: calc(0.75rem - 4px);
+
+  /* Font families */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-serif: "DM Serif Display", Georgia, serif;
+
+  /* Animations */
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-marquee-reverse: marquee-reverse 30s linear infinite;
+  --animate-pulse-slow: pulse-slow 2s ease-in-out infinite;
+  --animate-scan-line: scan-line 2s ease-in-out infinite;
 }
 
-html,
-body,
-#root {
-  height: 100%;
-  font-family: system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
+/* Keyframes */
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes scan-line {
+  0% {
+    top: 0%;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0%;
+  }
+}
+
+/* Utility: balanced text wrapping */
+@utility text-balance {
+  text-wrap: balance;
+}
+
+/* Base layer styles */
+@layer base {
+  * {
+    border-color: var(--color-border);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
 }

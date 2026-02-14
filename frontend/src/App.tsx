@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { UserProvider } from './context/UserContext';
+import LandingScreen from './screens/LandingScreen';
 import ScanScreen from './screens/ScanScreen';
 import ResultScreen from './screens/ResultScreen';
 import ProfileScreen from './screens/ProfileScreen';
@@ -10,7 +11,8 @@ export default function App() {
     <UserProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<ScanScreen />} />
+          <Route path="/" element={<LandingScreen />} />
+          <Route path="/scan" element={<ScanScreen />} />
           <Route path="/result" element={<ResultScreen />} />
           <Route path="/profile" element={<ProfileScreen />} />
           <Route path="/settings" element={<SettingsScreen />} />
