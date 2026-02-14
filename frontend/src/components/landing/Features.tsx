@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import {
   ScanLine,
   Brain,
@@ -5,7 +7,7 @@ import {
   Volume2,
   ShieldAlert,
   Heart,
-} from 'lucide-react'
+} from 'lucide-react';
 
 const features = [
   {
@@ -44,31 +46,65 @@ const features = [
     description:
       'Hear a spoken summary of results via ElevenLabs text-to-speech \u2014 perfect for on-the-go accessibility.',
   },
-]
+];
 
 export function Features() {
+  const gridRef = useRef<HTMLDivElement>(null);
+  const gridInView = useInView(gridRef, { once: true, margin: '-60px' });
+
   return (
-    <section id="features" className="py-24 md:py-32">
-      <div className="mx-auto max-w-6xl px-6">
-        {/* Section header */}
+    <section
+      id="features"
+      className="relative overflow-hidden py-24 md:py-32"
+    >
+      <div className="relative z-10 mx-auto max-w-6xl px-6">
+        {/* Section header with motion */}
         <div className="mx-auto max-w-2xl text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-primary">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-sm font-semibold uppercase tracking-wider text-primary"
+          >
             Features
-          </span>
-          <h2 className="mt-3 text-4xl font-light tracking-tight text-foreground md:text-6xl text-balance font-serif">
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="mt-3 font-serif text-4xl font-light tracking-tight text-foreground md:text-6xl text-balance"
+          >
             Everything you need to eat safely
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground font-light">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-4 text-lg leading-relaxed text-muted-foreground font-light"
+          >
             From scanning to scoring to speaking &mdash; a complete ingredient
             analysis pipeline built for your safety.
-          </p>
+          </motion.p>
         </div>
 
-        {/* Feature grid */}
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <div
+        {/* Feature grid with useInView stagger */}
+        <div
+          ref={gridRef}
+          className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {features.map((feature, i) => (
+            <motion.div
               key={feature.title}
+              initial={{ opacity: 0, y: 50, scale: 0.97 }}
+              animate={gridInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+              transition={{
+                duration: 0.55,
+                delay: i * 0.1,
+                ease: [0.33, 1, 0.68, 1],
+              }}
               className="group relative rounded-2xl border border-border/60 bg-card/60 p-7 backdrop-blur-sm transition-all hover:border-primary/30 hover:bg-card hover:shadow-lg hover:shadow-primary/5"
             >
               <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
@@ -80,10 +116,10 @@ export function Features() {
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {feature.description}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
     </section>
-  )
+  );
 }

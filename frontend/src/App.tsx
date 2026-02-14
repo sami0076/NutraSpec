@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { UserProvider } from './context/UserContext';
+import { ErrorFallback } from './components/ErrorFallback';
 import LandingScreen from './screens/LandingScreen';
 import AuthScreen from './screens/AuthScreen';
 import ScanScreen from './screens/ScanScreen';
@@ -9,7 +10,8 @@ import SettingsScreen from './screens/SettingsScreen';
 
 export default function App() {
   return (
-    <UserProvider>
+    <ErrorFallback>
+      <UserProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingScreen />} />
@@ -21,5 +23,6 @@ export default function App() {
         </Routes>
       </BrowserRouter>
     </UserProvider>
+    </ErrorFallback>
   );
 }

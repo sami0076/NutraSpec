@@ -1,4 +1,5 @@
-import { Leaf } from 'lucide-react'
+import { motion } from 'framer-motion';
+import { Leaf } from 'lucide-react';
 
 const footerLinks = [
   {
@@ -44,23 +45,41 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-6">
           {/* Brand column */}
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="flex items-center gap-2"
+            >
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
                 <Leaf className="h-4 w-4 text-primary-foreground" />
               </div>
               <span className="text-base font-bold text-foreground">
                 FoodFinder<span className="text-primary">.AI</span>
               </span>
-            </div>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground"
+            >
               AI-powered ingredient risk scoring. Snap a photo, get a
               personalized safety analysis. Built at PatriotHacks 2026.
-            </p>
+            </motion.p>
           </div>
 
           {/* Link columns */}
-          {footerLinks.map((group) => (
-            <div key={group.heading}>
+          {footerLinks.map((group, i) => (
+            <motion.div
+              key={group.heading}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.05 * i }}
+            >
               <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
                 {group.heading}
               </h3>
@@ -76,12 +95,18 @@ export function Footer() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border/50 pt-8 md:flex-row">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border/50 pt-8 md:flex-row"
+        >
           <p className="text-sm text-muted-foreground">
             &copy; 2026 FoodFinder.AI. Built at PatriotHacks.
           </p>
@@ -108,8 +133,8 @@ export function Footer() {
               Discord
             </a>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
-  )
+  );
 }

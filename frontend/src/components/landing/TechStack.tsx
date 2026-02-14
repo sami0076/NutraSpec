@@ -1,3 +1,6 @@
+import { useRef } from 'react';
+import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+
 const techItems = [
   {
     category: 'Frontend',
@@ -23,9 +26,9 @@ const techItems = [
     category: 'Scoring',
     items: ['Custom Deterministic Engine'],
   },
-]
+];
 
-const marqueeLabels = [
+const tickerItems = [
   'React',
   'TypeScript',
   'Tailwind CSS',
@@ -38,31 +41,70 @@ const marqueeLabels = [
   'Vite',
   'Pydantic',
   'Uvicorn',
-]
+];
 
 export function TechStack() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const gridInView = useInView(gridRef, { once: true, margin: '-80px' });
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const tickerX = useTransform(scrollYProgress, [0, 1], [0, -300]);
+
   return (
-    <section id="tech-stack" className="py-24 md:py-32">
+    <section id="tech-stack" ref={sectionRef} className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
-        {/* Section header */}
+        {/* Section header with motion */}
         <div className="mx-auto max-w-2xl text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-primary">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-sm font-semibold uppercase tracking-wider text-primary"
+          >
             Tech Stack
-          </span>
-          <h2 className="mt-3 text-4xl font-light tracking-tight text-foreground md:text-6xl text-balance font-serif">
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7, delay: 0.1 }}
+            className="mt-3 font-serif text-4xl font-light tracking-tight text-foreground md:text-6xl text-balance"
+          >
             Built with modern, proven tools
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground font-light">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="mt-4 text-lg leading-relaxed text-muted-foreground font-light"
+          >
             A carefully selected stack optimized for speed, reliability, and
             developer experience.
-          </p>
+          </motion.p>
         </div>
 
-        {/* Tech grid */}
-        <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {techItems.map((group) => (
-            <div
+        {/* Tech grid with useInView stagger */}
+        <div
+          ref={gridRef}
+          className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {techItems.map((group, i) => (
+            <motion.div
               key={group.category}
+              initial={{ opacity: 0, y: 40 }}
+              animate={gridInView ? { opacity: 1, y: 0 } : {}}
+              transition={{
+                duration: 0.5,
+                delay: i * 0.08,
+                ease: [0.33, 1, 0.68, 1],
+              }}
               className="rounded-2xl border border-border/60 bg-card/60 p-6 backdrop-blur-sm transition-all hover:border-primary/30 hover:bg-card"
             >
               <h3 className="text-xs font-bold uppercase tracking-wider text-primary">
@@ -78,16 +120,19 @@ export function TechStack() {
                   </span>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        {/* Scrolling marquee */}
+        {/* Scroll-driven horizontal ticker */}
         <div className="relative mt-16 overflow-hidden">
           <div className="absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-background to-transparent" />
           <div className="absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-background to-transparent" />
-          <div className="flex animate-marquee gap-12 whitespace-nowrap py-4">
-            {[...marqueeLabels, ...marqueeLabels].map((label, i) => (
+          <motion.div
+            className="flex gap-12 whitespace-nowrap py-4"
+            style={{ x: tickerX }}
+          >
+            {[...tickerItems, ...tickerItems].map((label, i) => (
               <span
                 key={`${label}-${i}`}
                 className="text-sm font-medium text-muted-foreground/60"
@@ -95,9 +140,9 @@ export function TechStack() {
                 {label}
               </span>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { ArrowRight, Leaf } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
@@ -6,25 +7,55 @@ export function CTA() {
   return (
     <section className="py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
-        <div className="relative overflow-hidden rounded-3xl bg-primary p-10 md:p-16">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6 }}
+          className="relative overflow-hidden rounded-3xl bg-primary p-10 md:p-16"
+        >
           {/* Decorative circles */}
           <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary-foreground/10 blur-2xl" />
           <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-primary-foreground/5 blur-2xl" />
 
           <div className="relative z-10 flex flex-col items-center text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur-sm"
+            >
               <Leaf className="h-7 w-7 text-primary-foreground" />
-            </div>
+            </motion.div>
 
-            <h2 className="mt-6 text-4xl font-light tracking-tight text-primary-foreground md:text-6xl text-balance font-serif">
+            <motion.h2
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="mt-6 text-4xl font-light tracking-tight text-primary-foreground md:text-6xl text-balance font-serif"
+            >
               Ready to eat with confidence?
-            </h2>
-            <p className="mt-4 max-w-lg text-xl leading-relaxed text-primary-foreground/80 font-light">
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.22 }}
+              className="mt-4 max-w-lg text-xl leading-relaxed text-primary-foreground/80 font-light"
+            >
               Start scanning ingredient labels today and get personalized safety
               scores powered by AI.
-            </p>
+            </motion.p>
 
-            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="mt-8 flex flex-col items-center gap-4 sm:flex-row"
+            >
               <Link to="/scan">
                 <Button
                   size="lg"
@@ -47,9 +78,9 @@ export function CTA() {
                   View on GitHub
                 </Button>
               </a>
-            </div>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

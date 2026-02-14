@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import {
   Eye,
   Mic,
@@ -62,25 +63,57 @@ export function BentoShowcase() {
   return (
     <section className="py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
-        {/* Section header */}
+        {/* Section header — scroll reveal */}
         <div className="mx-auto max-w-2xl text-center">
-          <span className="text-sm font-semibold uppercase tracking-wider text-primary">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-sm font-semibold uppercase tracking-wider text-primary block"
+          >
             Deep Dive
-          </span>
-          <h2 className="mt-3 text-4xl font-light tracking-tight text-foreground md:text-6xl text-balance font-serif">
+          </motion.span>
+          <motion.h2
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.08 }}
+            className="mt-3 text-4xl font-light tracking-tight text-foreground md:text-6xl text-balance font-serif"
+          >
             Powerful capabilities, beautifully simple
-          </h2>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground font-light">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="mt-4 text-lg leading-relaxed text-muted-foreground font-light"
+          >
             A closer look at what makes FoodFinder.AI the smartest way to
             understand your food.
-          </p>
+          </motion.p>
         </div>
 
-        {/* Bento grid */}
-        <div className="mt-16 grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)]">
+        {/* Bento grid — staggered reveal */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+            hidden: {},
+          }}
+          className="mt-16 grid gap-4 md:grid-cols-3 md:auto-rows-[minmax(180px,auto)]"
+        >
           {bentoItems.map((item) => (
-            <div
+            <motion.div
               key={item.title}
+              variants={{
+                visible: { opacity: 1, y: 0 },
+                hidden: { opacity: 0, y: 20 },
+              }}
+              transition={{ duration: 0.5 }}
               className={`group relative flex flex-col justify-between overflow-hidden rounded-2xl border p-6 transition-all hover:shadow-lg hover:shadow-primary/5 ${
                 item.highlight
                   ? 'border-primary/30 bg-primary/5'
@@ -104,9 +137,9 @@ export function BentoShowcase() {
                   {item.description}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )
