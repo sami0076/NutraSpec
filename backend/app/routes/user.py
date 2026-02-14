@@ -1,17 +1,20 @@
 """
-User Route — Profile CRUD
+User Route — Profile CRUD (authenticated)
 
-GET /user/profile — fetch user profile
-PUT /user/profile — update user profile
+GET /user/profile — fetch authenticated user's profile
+PUT /user/profile — update authenticated user's profile
+
+Both endpoints require a valid Supabase JWT in the Authorization header.
 """
 
 from __future__ import annotations
 
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends
 from pydantic import BaseModel, Field
 
+from app.dependencies import require_current_user
 from app.services.supabase_service import get_user_profile, update_user_profile
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -19,12 +22,9 @@ router = APIRouter(prefix="/user", tags=["user"])
 
 # Schemas
 
-
-
 class ProfileUpdate(BaseModel):
-    """Request body for profile update."""
+    """Request body for profile update (user_id comes from JWT)."""
 
-    user_id: str = Field(..., description="User identifier")
     allergies: Optional[list[str]] = Field(None, description="List of allergies")
     dietary_restrictions: Optional[list[str]] = Field(
         None, description="Dietary restrictions (e.g. vegan, gluten_free)"
@@ -39,16 +39,15 @@ class ProfileUpdate(BaseModel):
 
 # Endpoints
 
-
 @router.get("/profile")
-def get_profile(user_id: str = Query(..., description="User identifier")) -> dict:
+def get_profile(current_user: dict = Depends(require_current_user)) -> dict:
     """
-    Fetch user profile by user_id.
+    Fetch the authenticated user's profile.
 
     Returns allergies, dietary_restrictions, health_conditions, health_goals.
     """
+    user_id = current_user["id"]
     profile = get_user_profile(user_id)
-    # Distinguish "empty default" from "user has empty profile" — for now we return same shape
     return {
         "user_id": user_id,
         "allergies": profile["allergies"],
@@ -59,24 +58,26 @@ def get_profile(user_id: str = Query(..., description="User identifier")) -> dic
 
 
 @router.put("/profile")
-def put_profile(body: ProfileUpdate) -> dict:
+def put_profile(
+    body: ProfileUpdate,
+    current_user: dict = Depends(require_current_user),
+) -> dict:
     """
-    Update (upsert) user profile.
+    Update (upsert) the authenticated user's profile.
 
     Only provided fields are updated; others remain unchanged.
     """
-    if not body.user_id or not body.user_id.strip():
-        raise HTTPException(status_code=422, detail="user_id is required")
+    user_id = current_user["id"]
 
     profile = update_user_profile(
-        user_id=body.user_id.strip(),
+        user_id=user_id,
         allergies=body.allergies,
         dietary_restrictions=body.dietary_restrictions,
         health_conditions=body.health_conditions,
         health_goals=body.health_goals,
     )
     return {
-        "user_id": body.user_id,
+        "user_id": user_id,
         "allergies": profile["allergies"],
         "dietary_restrictions": profile["dietary_restrictions"],
         "health_conditions": profile["health_conditions"],

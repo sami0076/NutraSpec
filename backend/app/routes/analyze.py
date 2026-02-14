@@ -3,15 +3,18 @@ Analyze Route — POST /analyze
 
 Receives image, extracts ingredients via Gemini, scores via engine,
 returns risk result. Optionally includes TTS audio of summary.
+
+Auth: optional. If a valid Supabase JWT is present, the user's profile
+is loaded for personalized scoring. Otherwise an anonymous default is used.
 """
 
 from __future__ import annotations
 
 import base64
-from typing import Optional
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
+from app.dependencies import get_current_user
 from app.services.gemini_service import GeminiExtractionError, extract_ingredients_from_image
 from app.services.scoring_service import score_ingredients
 from app.services.supabase_service import get_user_profile
@@ -23,14 +26,14 @@ router = APIRouter(prefix="/analyze", tags=["analyze"])
 @router.post("")
 async def analyze_image(
     image: UploadFile = File(...),
-    user_id: Optional[str] = Form(None),
     include_audio: bool = Form(False),
+    current_user: dict | None = Depends(get_current_user),
 ) -> dict:
     """
     Analyze a food label image for ingredient risk.
 
     - Extracts ingredients via Gemini
-    - Fetches user profile from Supabase (if user_id provided)
+    - Fetches user profile from Supabase (if authenticated)
     - Runs scoring engine
     - Optionally generates TTS audio of summary
     """
@@ -62,7 +65,8 @@ async def analyze_image(
             detail="No ingredients could be extracted from the image. Ensure it shows a food label.",
         ) from None
 
-    # Get user profile
+    # Get user profile (authenticated) or anonymous defaults
+    user_id = current_user["id"] if current_user else None
     profile = get_user_profile(user_id) if user_id else {
         "allergies": [],
         "dietary_restrictions": [],

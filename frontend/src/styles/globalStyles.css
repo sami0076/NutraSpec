@@ -1,68 +1,104 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Serif+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=DM+Sans:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap");
 @import "tailwindcss";
 
 /* Source paths for Tailwind to scan */
 @source "../../src/**/*.{js,ts,jsx,tsx}";
 
 /* ============================================
-   FoodFinder.AI Theme — White & Orange
+   FoodFinder.AI Theme
+   Oxblood #4A0404  →  primary
+   Alhambra Cream #F7F2E1  →  background
    ============================================ */
 
 @theme {
-  /* Color palette */
-  --color-background: hsl(30 25% 98%);
-  --color-foreground: hsl(20 15% 15%);
+  /* --- Color palette --- */
 
-  --color-card: hsl(0 0% 100%);
-  --color-card-foreground: hsl(20 15% 15%);
+  --color-background: hsl(46 58% 93%);
+  --color-foreground: hsl(0 40% 12%);
 
-  --color-popover: hsl(0 0% 100%);
-  --color-popover-foreground: hsl(20 15% 15%);
+  --color-card: hsl(44 40% 88%);
+  --color-card-foreground: hsl(0 40% 12%);
 
-  /* Primary: vibrant orange */
-  --color-primary: hsl(24 95% 53%);
-  --color-primary-foreground: hsl(0 0% 100%);
+  --color-popover: hsl(45 45% 90%);
+  --color-popover-foreground: hsl(0 40% 12%);
 
-  --color-secondary: hsl(30 15% 95%);
-  --color-secondary-foreground: hsl(20 15% 15%);
+  /* Primary: oxblood */
+  --color-primary: hsl(0 90% 15%);
+  --color-primary-foreground: hsl(46 58% 93%);
 
-  --color-muted: hsl(30 10% 93%);
-  --color-muted-foreground: hsl(20 5% 45%);
+  --color-secondary: hsl(44 30% 85%);
+  --color-secondary-foreground: hsl(0 60% 14%);
 
-  --color-accent: hsl(24 95% 53%);
-  --color-accent-foreground: hsl(0 0% 100%);
+  --color-muted: hsl(44 25% 83%);
+  --color-muted-foreground: hsl(0 12% 42%);
 
-  --color-destructive: hsl(0 84% 60%);
-  --color-destructive-foreground: hsl(0 0% 100%);
+  --color-accent: hsl(44 28% 82%);
+  --color-accent-foreground: hsl(0 70% 16%);
+
+  --color-destructive: hsl(0 72% 51%);
+  --color-destructive-foreground: hsl(46 58% 93%);
 
   --color-warning: hsl(38 92% 50%);
-  --color-warning-foreground: hsl(20 15% 15%);
+  --color-warning-foreground: hsl(0 40% 12%);
 
   --color-success: hsl(142 71% 45%);
   --color-success-foreground: hsl(0 0% 100%);
 
-  --color-border: hsl(30 10% 88%);
-  --color-input: hsl(30 10% 88%);
-  --color-ring: hsl(24 95% 53%);
+  --color-border: hsl(44 22% 80%);
+  --color-input: hsl(44 22% 80%);
+  --color-ring: hsl(0 90% 15%);
 
-  /* Border radius */
+  /* --- Border radius --- */
   --radius: 0.75rem;
   --radius-lg: 0.75rem;
   --radius-md: calc(0.75rem - 2px);
   --radius-sm: calc(0.75rem - 4px);
 
-  /* Font families */
-  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
-  --font-serif: "DM Serif Display", Georgia, serif;
+  /* --- Font families --- */
+  --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
 
-  /* Animations */
+  /* --- Animations --- */
   --animate-marquee: marquee 30s linear infinite;
   --animate-marquee-reverse: marquee-reverse 30s linear infinite;
-  --animate-pulse-slow: pulse-slow 2s ease-in-out infinite;
-  --animate-scan-line: scan-line 2s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-fade-in-up: fade-in-up 0.6s ease-out forwards;
+  --animate-pulse-soft: pulse-soft 3s ease-in-out infinite;
 }
 
 /* Keyframes */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -81,34 +117,12 @@
   }
 }
 
-@keyframes pulse-slow {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.6;
-  }
-}
-
-@keyframes scan-line {
-  0% {
-    top: 0%;
-  }
-  50% {
-    top: 100%;
-  }
-  100% {
-    top: 0%;
-  }
-}
-
-/* Utility: balanced text wrapping */
+/* Utilities */
 @utility text-balance {
   text-wrap: balance;
 }
 
-/* Base layer styles */
+/* Base layer */
 @layer base {
   * {
     border-color: var(--color-border);

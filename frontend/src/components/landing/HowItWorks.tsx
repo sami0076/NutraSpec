@@ -1,121 +1,124 @@
-import { useState } from 'react'
-import {
-  ArrowRight,
-  Camera,
-  Brain,
-  ShieldCheck,
-  Volume2,
-} from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { Link } from 'react-router-dom'
+import { Camera, Cpu, BarChart3, Volume2 } from 'lucide-react'
 
 const steps = [
   {
-    name: '1. Scan',
+    number: '01',
     icon: Camera,
-    color: 'from-orange-100 to-orange-50',
+    title: 'Scan',
     description:
-      'Point your phone camera at any food ingredient label. Our AI instantly captures and reads every ingredient — even from blurry or curved labels.',
+      'Point your camera at any ingredient label. Google Gemini extracts every ingredient from the image.',
   },
   {
-    name: '2. Analyze',
-    icon: Brain,
-    color: 'from-amber-100 to-amber-50',
+    number: '02',
+    icon: Cpu,
+    title: 'Analyze',
     description:
-      'Google Gemini extracts and normalizes each ingredient. Our scoring engine cross-references them against allergens, dietary flags, and ultra-processing markers.',
+      'A deterministic scoring engine cross-references each ingredient against your allergy profile, dietary restrictions, and health goals.',
   },
   {
-    name: '3. Score',
-    icon: ShieldCheck,
-    color: 'from-green-100 to-green-50',
+    number: '03',
+    icon: BarChart3,
+    title: 'Score',
     description:
-      'Get a personalized risk score (0-100) with clear conflict breakdowns. Every ingredient flagged tells you exactly why and how it affects you.',
+      'Get a 0\u2013100 risk score with clear conflict breakdowns (LOW / MEDIUM / HIGH) and a human-readable explanation.',
   },
   {
-    name: '4. Listen',
+    number: '04',
     icon: Volume2,
-    color: 'from-blue-100 to-blue-50',
+    title: 'Listen',
     description:
-      'Hear a natural-sounding audio explanation of your results via ElevenLabs text-to-speech. Great for accessibility or when your hands are full at the grocery store.',
+      'Hear a spoken summary of the results via ElevenLabs text-to-speech for quick, hands-free feedback.',
   },
 ]
 
 export function HowItWorks() {
-  const [active, setActive] = useState(0)
-
   return (
-    <section className="px-6 py-24 md:py-32">
-      <div className="mx-auto max-w-6xl">
-        {/* Section label */}
-        <div className="mb-6 flex justify-center">
-          <span className="rounded-full border border-border/50 bg-secondary/50 px-4 py-1.5 text-xs font-medium text-muted-foreground">
-            The Process
+    <section id="how-it-works" className="py-24 md:py-32 bg-card/50">
+      <div className="mx-auto max-w-6xl px-6">
+        {/* Section header */}
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="text-sm font-semibold uppercase tracking-wider text-primary">
+            How It Works
           </span>
-        </div>
-
-        {/* Heading */}
-        <h2 className="mx-auto max-w-3xl text-center font-serif text-3xl leading-snug tracking-tight text-foreground md:text-5xl md:leading-tight">
-          <span className="text-balance">
-            Four steps to{' '}
-            <span className="text-primary">safer food choices.</span>
-          </span>
-        </h2>
-
-        <p className="mx-auto mt-6 max-w-2xl text-center text-base leading-relaxed text-muted-foreground">
-          From label to insight in seconds. FoodFinder.AI handles the heavy
-          lifting so you can make confident decisions at the shelf.
-        </p>
-
-        {/* Step cards */}
-        <div className="mt-16 grid gap-4 md:grid-cols-4">
-          {steps.map((step, i) => {
-            const Icon = step.icon
-            return (
-              <button
-                key={step.name}
-                onClick={() => setActive(i)}
-                className={cn(
-                  'group relative flex flex-col items-center overflow-hidden rounded-2xl border p-6 text-center transition-all duration-300',
-                  active === i
-                    ? 'border-primary/30 bg-card shadow-md shadow-orange-500/5'
-                    : 'border-border/30 bg-card/50 hover:border-border/50'
-                )}
-              >
-                <div
-                  className={cn(
-                    'mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-b',
-                    step.color
-                  )}
-                >
-                  <Icon className="h-6 w-6 text-foreground" />
-                </div>
-                <h4 className="text-sm font-semibold text-foreground">
-                  {step.name}
-                </h4>
-                {active === i && (
-                  <div className="absolute bottom-0 left-1/2 h-0.5 w-12 -translate-x-1/2 bg-primary" />
-                )}
-              </button>
-            )
-          })}
-        </div>
-
-        {/* Active description */}
-        <div className="mt-8 rounded-2xl border border-border/50 bg-card p-8 text-center shadow-sm">
-          <p className="mx-auto max-w-2xl text-base leading-relaxed text-muted-foreground">
-            {steps[active].description}
+          <h2 className="mt-3 text-4xl font-light tracking-tight text-foreground md:text-6xl text-balance font-serif">
+            From photo to safety score in seconds
+          </h2>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground font-light">
+            Four simple steps to understand exactly what goes into your body.
           </p>
         </div>
 
-        {/* CTA */}
-        <div className="mt-12 flex justify-center">
-          <Link
-            to="/scan"
-            className="group flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:gap-3"
-          >
-            Start Scanning
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </Link>
+        {/* Steps */}
+        <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {steps.map((step, i) => (
+            <div key={step.title} className="relative">
+              {/* Connector line */}
+              {i < steps.length - 1 && (
+                <div className="absolute right-0 top-12 hidden h-px w-8 translate-x-full bg-border lg:block" />
+              )}
+
+              <div className="flex flex-col items-start">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs font-bold text-primary/60">
+                    {step.number}
+                  </span>
+                  <div className="h-px flex-1 bg-border lg:hidden" />
+                </div>
+
+                <div className="mt-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                  <step.icon className="h-6 w-6" />
+                </div>
+
+                <h3 className="mt-5 text-xl font-semibold text-foreground">
+                  {step.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                  {step.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Flow diagram */}
+        <div className="mt-20 rounded-2xl border border-border/60 bg-background p-6 md:p-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            {[
+              { label: 'Photo Input', sub: 'Camera / Upload' },
+              { label: 'Gemini Vision', sub: 'Ingredient Extraction' },
+              { label: 'Scoring Engine', sub: 'Conflict Detection' },
+              { label: 'Risk Report', sub: 'Score + Audio' },
+            ].map((item, i) => (
+              <div
+                key={item.label}
+                className="flex items-center gap-4 md:flex-1"
+              >
+                <div className="flex-1 rounded-xl border border-border/50 bg-card p-4 text-center">
+                  <p className="text-sm font-semibold text-foreground">
+                    {item.label}
+                  </p>
+                  <p className="text-xs text-muted-foreground">{item.sub}</p>
+                </div>
+                {i < 3 && (
+                  <div className="hidden text-primary/40 md:block">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 12h14" />
+                      <path d="m12 5 7 7-7 7" />
+                    </svg>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

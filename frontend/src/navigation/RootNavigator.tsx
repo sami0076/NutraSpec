@@ -1,2 +1,3 @@
-// Central navigation config — used if you switch to a layout-based router
+// Navigation configuration is handled in App.tsx via React Router.
+// This file is reserved for future navigation enhancements (e.g. auth guards).
 export {};

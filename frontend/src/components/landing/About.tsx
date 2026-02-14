@@ -1,76 +1,104 @@
-import { Bot, Sparkles } from 'lucide-react'
+import { Database, ShieldCheck, Zap } from 'lucide-react'
+
+const stats = [
+  { value: '90+', label: 'Ingredients tracked' },
+  { value: '0\u2013100', label: 'Risk scoring range' },
+  { value: '50+', label: 'Allergy categories' },
+  { value: '<2s', label: 'Average scan time' },
+]
 
 export function About() {
   return (
-    <section className="relative px-6 py-24 md:py-32">
-      <div className="mx-auto max-w-6xl">
-        {/* Section label */}
-        <div className="mb-6 flex justify-center">
-          <span className="rounded-full border border-border/50 bg-secondary/50 px-4 py-1.5 text-xs font-medium text-muted-foreground">
-            How It Works
-          </span>
-        </div>
+    <section id="about" className="py-24 md:py-32 bg-card/50">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+          {/* Left column — text */}
+          <div>
+            <span className="text-sm font-semibold uppercase tracking-wider text-primary">
+              About FoodFinder.AI
+            </span>
+            <h2 className="mt-3 text-4xl font-light tracking-tight text-foreground md:text-6xl text-balance font-serif">
+              Real-time, audit-ready food safety analysis.
+            </h2>
+            <p className="mt-6 text-lg leading-relaxed text-muted-foreground font-light">
+              FoodFinder.AI combines the power of Google Gemini vision with a
+              fully deterministic scoring engine to give you accurate, unbiased
+              ingredient risk scores. No AI guessing on your safety &mdash; just
+              pure logic with weighted conflict detection.
+            </p>
 
-        {/* Section heading */}
-        <h2 className="mx-auto max-w-3xl text-center font-serif text-3xl leading-snug tracking-tight text-foreground md:text-5xl md:leading-tight">
-          <span className="text-balance">
-            AI-powered ingredient analysis,{' '}
-            <span className="text-primary">personalized for you.</span>
-          </span>
-        </h2>
-
-        {/* Sub text */}
-        <p className="mx-auto mt-6 max-w-2xl text-center text-base leading-relaxed text-muted-foreground md:text-lg">
-          FoodFinder.AI uses Google Gemini to extract every ingredient from a
-          photo of any food label, then scores each one against your personal
-          allergy profile and dietary goals.
-        </p>
-
-        {/* AI Agent Card */}
-        <div className="mx-auto mt-16 max-w-lg">
-          <div className="overflow-hidden rounded-2xl border border-border/50 bg-card shadow-lg shadow-orange-500/5">
-            {/* Agent header */}
-            <div className="flex items-center gap-3 border-b border-border/50 px-5 py-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                <Bot className="h-5 w-5 text-primary" />
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-foreground">
-                  FoodFinder AI
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  Ingredient Risk Analyst
-                </p>
-              </div>
-              <div className="ml-auto flex items-center gap-1.5">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
-                <span className="text-xs text-green-600">Analyzing</span>
-              </div>
+            <div className="mt-8 flex flex-col gap-5">
+              {[
+                {
+                  icon: Zap,
+                  title: 'Instant Results',
+                  desc: 'Get your risk score within seconds of scanning a label.',
+                },
+                {
+                  icon: ShieldCheck,
+                  title: 'Personalized Safety',
+                  desc: 'Scoring is based on your unique allergy profile and health goals.',
+                },
+                {
+                  icon: Database,
+                  title: 'Full History',
+                  desc: 'Every scan is saved to your profile for easy reference later.',
+                },
+              ].map((item) => (
+                <div key={item.title} className="flex gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <item.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-semibold text-foreground">
+                      {item.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            {/* Messages */}
-            <div className="space-y-3 p-5">
-              <div className="rounded-xl rounded-tl-sm bg-secondary/80 p-4">
-                <p className="text-sm leading-relaxed text-foreground">
-                  I{"'"}ve detected <strong>14 ingredients</strong> in this
-                  product. Based on your peanut allergy profile, I found{' '}
-                  <span className="font-semibold text-red-500">
-                    2 high-risk conflicts
-                  </span>
-                  . Overall risk score:{' '}
-                  <span className="font-semibold text-primary">62/100</span>.
-                </p>
-              </div>
-              <div className="rounded-xl rounded-tl-sm bg-secondary/80 p-4">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                  <p className="text-sm font-medium text-foreground">
-                    Audio explanation ready
+          {/* Right column — stats + visual */}
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              {stats.map((stat) => (
+                <div
+                  key={stat.label}
+                  className="rounded-2xl border border-border/60 bg-background p-6 text-center"
+                >
+                  <p className="text-3xl font-bold text-primary">
+                    {stat.value}
+                  </p>
+                  <p className="mt-1 text-sm text-muted-foreground">
+                    {stat.label}
                   </p>
                 </div>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Tap to hear a spoken summary of this product{"'"}s risk
-                  factors, powered by ElevenLabs.
+              ))}
+            </div>
+
+            {/* Schema preview card */}
+            <div className="rounded-2xl border border-border/60 bg-background p-6">
+              <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-primary">
+                Database Schema
+              </h4>
+              <div className="space-y-2 font-mono text-xs leading-relaxed text-muted-foreground">
+                <p>
+                  <span className="text-foreground font-semibold">users</span>{' '}
+                  &mdash; id, email, created_at
+                </p>
+                <p>
+                  <span className="text-foreground font-semibold">
+                    user_preferences
+                  </span>{' '}
+                  &mdash; allergies[], dietary_preferences[], health_goals[]
+                </p>
+                <p>
+                  <span className="text-foreground font-semibold">
+                    scan_history
+                  </span>{' '}
+                  &mdash; product_name, risk_score, risk_level, conflicts
                 </p>
               </div>
             </div>

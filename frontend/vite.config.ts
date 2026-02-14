@@ -9,6 +9,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Load .env from the repo root (one level up from frontend/)
+  envDir: path.resolve(__dirname, '..'),
   server: {
     port: 5173,
   },

@@ -1,33 +1,53 @@
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Leaf } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { Link } from 'react-router-dom'
 
 export function CTA() {
   return (
-    <section className="px-6 py-24 md:py-32">
-      <div className="mx-auto max-w-4xl">
-        <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-card p-12 text-center shadow-lg shadow-orange-500/5 md:p-20">
-          {/* Background glow */}
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,hsl(24_95%_53%/0.06)_0%,transparent_70%)]" />
+    <section className="py-24 md:py-32">
+      <div className="mx-auto max-w-6xl px-6">
+        <div className="relative overflow-hidden rounded-3xl bg-primary p-10 md:p-16">
+          {/* Decorative circles */}
+          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary-foreground/10 blur-2xl" />
+          <div className="absolute -bottom-16 -left-16 h-48 w-48 rounded-full bg-primary-foreground/5 blur-2xl" />
 
-          <h2 className="relative font-serif text-3xl leading-snug tracking-tight text-foreground md:text-5xl md:leading-tight">
-            <span className="text-balance">
-              Stop guessing what{"'"}s in your food.
-            </span>
-          </h2>
+          <div className="relative z-10 flex flex-col items-center text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-foreground/15 backdrop-blur-sm">
+              <Leaf className="h-7 w-7 text-primary-foreground" />
+            </div>
 
-          <p className="relative mx-auto mt-6 max-w-lg text-base leading-relaxed text-muted-foreground">
-            Scan any ingredient label and get instant, personalized risk analysis.
-            Your allergies, your diet, your rules.
-          </p>
+            <h2 className="mt-6 text-4xl font-light tracking-tight text-primary-foreground md:text-6xl text-balance font-serif">
+              Ready to eat with confidence?
+            </h2>
+            <p className="mt-4 max-w-lg text-xl leading-relaxed text-primary-foreground/80 font-light">
+              Start scanning ingredient labels today and get personalized safety
+              scores powered by AI.
+            </p>
 
-          <div className="relative mt-10 flex justify-center">
-            <Link
-              to="/scan"
-              className="group flex items-center gap-2 rounded-full bg-primary px-8 py-4 text-base font-medium text-primary-foreground transition-all hover:bg-primary/90 hover:gap-3"
-            >
-              Get Started Free
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </Link>
+            <div className="mt-8 flex flex-col items-center gap-4 sm:flex-row">
+              <Link to="/scan">
+                <Button
+                  size="lg"
+                  className="rounded-full bg-primary-foreground text-primary hover:bg-primary-foreground/90 px-8 py-6 text-base font-semibold gap-2"
+                >
+                  Get Started Free
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+              <a
+                href="https://github.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="rounded-full border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 px-8 py-6 text-base font-semibold"
+                >
+                  View on GitHub
+                </Button>
+              </a>
+            </div>
           </div>
         </div>
       </div>

@@ -1,3 +1,6 @@
-export default function ARResultOverlay() {
-  return <div>ARResultOverlay</div>;
+// ARResultOverlay — reserved for future AR overlay feature.
+export function ARResultOverlay() {
+  return null;
 }
+
+export default ARResultOverlay;
