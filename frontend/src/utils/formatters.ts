@@ -1,16 +1,16 @@
 import type { RiskLevel } from '@/types/scanTypes';
 
-/** Map risk classification to a short label. */
+/** Map risk classification to a short label (title case). */
 export function riskLabel(level: RiskLevel): string {
   switch (level) {
     case 'Low Risk':
-      return 'LOW';
+      return 'Low';
     case 'Medium Risk':
-      return 'MEDIUM';
+      return 'Medium';
     case 'High Risk':
-      return 'HIGH';
+      return 'High';
     default:
-      return 'UNKNOWN';
+      return 'Unknown';
   }
 }
 

@@ -2,7 +2,6 @@
 Config — Environment Variables
 
 Reads and exposes environment variables for the backend.
-Load .env via python-dotenv before importing this module (e.g. in main.py).
 """
 
 from __future__ import annotations
@@ -21,34 +20,25 @@ def get_settings() -> "Settings":
 class Settings:
     """Application settings from environment variables."""
 
-    # ---- Gemini ----
     gemini_api_key: Optional[str] = None
-
-    # ---- ElevenLabs ----
     elevenlabs_api_key: Optional[str] = None
-
-    # ---- Supabase ----
     supabase_url: Optional[str] = None
     supabase_key: Optional[str] = None
-
-    # ---- Server ----
+    supabase_service_role_key: Optional[str] = None
+    supabase_jwt_secret: Optional[str] = None
     backend_host: str = "0.0.0.0"
     backend_port: int = 8000
 
     def __init__(self) -> None:
         self.gemini_api_key = os.getenv("GEMINI_API_KEY")
         self.elevenlabs_api_key = os.getenv("ELEVENLABS_API_KEY")
-        # Support both SUPABASE_* and VITE_SUPABASE_* env vars so a single
-        # root .env works for both backend and Vite frontend.
         self.supabase_url = os.getenv("SUPABASE_URL") or os.getenv("VITE_SUPABASE_URL")
         self.supabase_key = os.getenv("SUPABASE_KEY") or os.getenv("VITE_SUPABASE_ANON_KEY")
-
-        host = os.getenv("BACKEND_HOST")
-        if host:
+        self.supabase_service_role_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+        self.supabase_jwt_secret = os.getenv("SUPABASE_JWT_SECRET")
+        if host := os.getenv("BACKEND_HOST"):
             self.backend_host = host
-
-        port = os.getenv("BACKEND_PORT")
-        if port:
+        if port := os.getenv("BACKEND_PORT"):
             try:
                 self.backend_port = int(port)
             except ValueError:

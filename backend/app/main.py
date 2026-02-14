@@ -1,20 +1,29 @@
 """
-FoodFinder.AI — FastAPI Entrypoint
+FoodFinder.AI Backend — FastAPI Application
 
-AI-powered ingredient risk scoring. Image to Gemini extraction to Scoring engine.
+Endpoints:
+  POST /analyze     — Analyze food label image (multipart: image + include_audio)
+  GET  /user/profile — Get user profile (auth required)
+  PUT  /user/profile — Update user profile (auth required)
+  GET  /health      — Health check
 """
 
+from __future__ import annotations
+
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from dotenv import load_dotenv
+
+# Load .env from project root or backend/
+_root = Path(__file__).resolve().parents[2]
+load_dotenv(_root / ".env")
+load_dotenv(_root / "backend" / ".env")  # fallback if .env lives in backend/
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.core.exceptions import AppException
-from app.routes import analyze_router, health_router, user_router
-
-# Load .env before other app imports that read env vars
-load_dotenv()
+from app.routes import analyze, health, user
 
 
 @asynccontextmanager
@@ -24,37 +33,20 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="FoodFinder.AI",
-    description="AI ingredient risk scoring — extract ingredients from labels, score against user profile.",
+    title="FoodFinder.AI API",
+    description="AI-powered ingredient risk analysis for food labels",
     version="1.0.0",
     lifespan=lifespan,
 )
 
-# CORS — allow frontend (Vite dev server, local network for mobile testing)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "https://localhost:5173",
-        "http://127.0.0.1:5173",
-        "https://127.0.0.1:5173",
-    ],
-    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+)(:\d+)?",
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-app.include_router(health_router)
-app.include_router(analyze_router)
-app.include_router(user_router)
-
-
-@app.exception_handler(AppException)
-def handle_app_exception(request, exc: AppException):
-    from fastapi.responses import JSONResponse
-
-    return JSONResponse(
-        status_code=exc.status_code,
-        content={"detail": exc.message},
-    )
+app.include_router(analyze.router, prefix="/analyze", tags=["analyze"])
+app.include_router(user.router)
+app.include_router(health.router, prefix="/health", tags=["health"])

@@ -14,9 +14,16 @@ export interface AnalyzeResult {
   score: number; // 0–100, higher = safer
   risk_classification: RiskLevel;
   flagged_ingredients: FlaggedIngredient[];
-  unknown_ingredients: string[];
   summary: string;
   total_ingredients: number;
   conflict_count: number;
+  /** Product name from vision analysis */
+  product_name?: string;
+  /** Brand from vision analysis (null if not visible) */
+  brand?: string | null;
+  /** Full list of ingredients from vision analysis */
+  ingredients?: string[];
+  /** Vision extraction confidence: high | medium | low */
+  confidence?: string;
   audio_base64?: string | null;
 }

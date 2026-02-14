@@ -84,6 +84,10 @@ export function CameraView({ stream, onCapture, onFileSelect, onClose }: CameraV
       {/* Hidden canvas for capture */}
       <canvas ref={canvasRef} className="hidden" />
 
+      <p className="text-xs text-muted-foreground text-center max-w-sm">
+        Aim at the ingredients list (not nutrition facts) for best results.
+      </p>
+
       {/* Action buttons */}
       <div className="flex items-center gap-4">
         {stream && (

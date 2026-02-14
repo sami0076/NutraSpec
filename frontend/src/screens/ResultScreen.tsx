@@ -4,7 +4,6 @@ import {
   ScanLine,
   Leaf,
   ShieldCheck,
-  AlertTriangle,
   HelpCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -70,67 +69,67 @@ export default function ResultScreen() {
       </header>
 
       <div className="mx-auto max-w-3xl px-6 py-10">
-        {/* Score hero */}
-        <div className="flex flex-col items-center text-center">
-          <div className="relative">
-            <ScoreCircle
-              score={result.score}
-              riskLevel={result.risk_classification}
-              size={160}
-            />
-          </div>
-
-          <div className="mt-16">
-            <RiskBadge level={result.risk_classification} className="text-sm px-4 py-1.5" />
-          </div>
-
-          <h1 className="mt-4 text-2xl font-light text-foreground font-serif md:text-3xl">
-            Safety Score: {Math.round(result.score)}
+        {/* 1. Product name (e.g. Lays, Pringles) */}
+        <div className="rounded-xl border border-border/60 bg-card p-6 mb-8">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-2">
+            Product
+          </h2>
+          <h1 className="text-2xl font-light text-foreground font-serif md:text-3xl">
+            {result.product_name || result.brand || 'Unknown Product'}
           </h1>
+          {result.brand && result.product_name && result.product_name !== result.brand && (
+            <p className="mt-1 text-sm text-muted-foreground">
+              {result.brand}
+            </p>
+          )}
         </div>
 
-        {/* Stats row */}
-        <div className="mt-10 grid grid-cols-3 gap-4">
-          <div className="rounded-xl border border-border/60 bg-card p-4 text-center">
-            <div className="flex items-center justify-center gap-1.5 text-primary">
-              <ScanLine className="h-4 w-4" />
-            </div>
-            <p className="mt-1 text-xl font-bold text-foreground">
-              {result.total_ingredients}
-            </p>
-            <p className="text-xs text-muted-foreground">Ingredients</p>
-          </div>
-          <div className="rounded-xl border border-border/60 bg-card p-4 text-center">
-            <div className="flex items-center justify-center gap-1.5 text-destructive">
-              <AlertTriangle className="h-4 w-4" />
-            </div>
-            <p className="mt-1 text-xl font-bold text-foreground">
-              {result.conflict_count}
-            </p>
-            <p className="text-xs text-muted-foreground">Conflicts</p>
-          </div>
-          <div className="rounded-xl border border-border/60 bg-card p-4 text-center">
-            <div className="flex items-center justify-center gap-1.5 text-muted-foreground">
-              <ShieldCheck className="h-4 w-4" />
-            </div>
-            <p className="mt-1 text-xl font-bold text-foreground">
-              {result.unknown_ingredients.length}
-            </p>
-            <p className="text-xs text-muted-foreground">Unknown</p>
-          </div>
+        {/* 2. Ingredients */}
+        <div className="rounded-xl border border-border/60 bg-card p-6 mb-8">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-3">
+            Ingredients
+          </h2>
+          <p className="text-sm leading-relaxed text-foreground">
+            {(result.ingredients || []).length > 0
+              ? (result.ingredients || []).map((i) => i.replace(/_/g, ' ')).join(', ')
+              : 'No ingredients extracted.'}
+          </p>
         </div>
 
-        {/* Summary */}
-        {result.summary && (
-          <div className="mt-8 rounded-xl border border-border/60 bg-card p-6">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-3">
-              Summary
-            </h2>
-            <p className="text-sm leading-relaxed text-foreground">
-              {result.summary}
-            </p>
-          </div>
-        )}
+        {/* 3. Risks (if any) */}
+        <div className="mb-8">
+          <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
+            Risks for Your Profile
+          </h2>
+          {result.conflict_count > 0 ? (
+            <>
+              <div className="flex items-center gap-3 mb-4">
+                <ScoreCircle
+                  score={result.score}
+                  riskLevel={result.risk_classification}
+                  size={100}
+                />
+                <div>
+                  <RiskBadge level={result.risk_classification} className="text-sm px-4 py-1.5" />
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    {result.summary}
+                  </p>
+                </div>
+              </div>
+              <ConflictList flagged={result.flagged_ingredients} />
+            </>
+          ) : (
+            <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
+              <ShieldCheck className="h-12 w-12 text-green-600 mx-auto mb-2" />
+              <p className="text-sm font-medium text-foreground">
+                No risks detected for your profile.
+              </p>
+              <p className="mt-1 text-sm text-muted-foreground">
+                {result.summary}
+              </p>
+            </div>
+          )}
+        </div>
 
         {/* Audio player */}
         {result.audio_base64 && (
@@ -138,17 +137,6 @@ export default function ResultScreen() {
             <AudioPlayer audioBase64={result.audio_base64} />
           </div>
         )}
-
-        {/* Conflict list */}
-        <div className="mt-8">
-          <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-4">
-            Ingredient Details
-          </h2>
-          <ConflictList
-            flagged={result.flagged_ingredients}
-            unknown={result.unknown_ingredients}
-          />
-        </div>
 
         {/* Actions */}
         <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">

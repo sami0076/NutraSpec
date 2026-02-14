@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, ScanLine, Leaf } from 'lucide-react';
 import { CameraView } from '@/components/CameraView';
@@ -7,13 +7,22 @@ import { Button } from '@/components/ui/button';
 import { useAnalyze } from '@/hooks/useAnalyze';
 import { useCameraPermission } from '@/hooks/useCameraPermission';
 import { useUser } from '@/context/UserContext';
+import { useUserProfile } from '@/hooks/useUserProfile';
 
 export default function ScanScreen() {
   const navigate = useNavigate();
   const { user } = useUser();
+  const { profile, loadProfile } = useUserProfile();
   const { analyze, loading, error } = useAnalyze();
   const { stream, status, requestCamera, stopCamera } = useCameraPermission();
   const [cameraActive, setCameraActive] = useState(false);
+
+  // Load profile when logged in so it's sent with analyze requests
+  useEffect(() => {
+    if (user?.id) {
+      loadProfile();
+    }
+  }, [user?.id, loadProfile]);
 
   const startCamera = useCallback(async () => {
     await requestCamera();
@@ -30,17 +39,17 @@ export default function ScanScreen() {
       stopCamera();
       setCameraActive(false);
 
-      // user_id is extracted from the Supabase JWT on the backend
       const result = await analyze({
         image: imageBlob,
         includeAudio: true,
+        profile: profile ?? undefined,
       });
 
       if (result) {
         navigate('/result', { state: { result } });
       }
     },
-    [analyze, navigate, stopCamera],
+    [analyze, navigate, stopCamera, profile],
   );
 
   return (
@@ -86,6 +95,17 @@ export default function ScanScreen() {
               Point your camera at an ingredient list or upload a photo. We{"'"}ll
               analyze every ingredient against your dietary profile.
             </p>
+
+            <div className="mt-6 max-w-md rounded-xl border border-border/60 bg-muted/30 px-4 py-3 text-left">
+              <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-2">
+                Tips for best results
+              </p>
+              <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                <li>Capture the ingredients list clearly (not nutrition facts)</li>
+                <li>Hold steady and ensure good lighting</li>
+                <li>Avoid glare and shadows on the label</li>
+              </ul>
+            </div>
 
             {error && (
               <div className="mt-6 w-full max-w-md rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">

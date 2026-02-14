@@ -9,9 +9,11 @@ Built at **PatriotHacks 2026**.
 ## What It Does
 
 1. **Scan** — Point your camera at any ingredient label. Google Gemini extracts every ingredient from the image.
-2. **Analyze** — A deterministic scoring engine cross-references each ingredient against your allergy profile, dietary restrictions, and health goals.
-3. **Score** — Get a 0–100 risk score with clear conflict breakdowns (LOW / MEDIUM / HIGH) and a human-readable explanation.
+2. **Analyze** — Gemini grades ingredients against your allergy profile, dietary restrictions, and health goals.
+3. **Score** — Get a 0–100 risk score with clear conflict breakdowns (Low / Medium / High Risk) and a human-readable summary.
 4. **Listen** — Hear a spoken summary of the results via ElevenLabs text-to-speech.
+5. **Cache** — Analysis results are cached by (ingredients + profile) hash for consistency and speed.
+6. **Allergen check** — Deterministic backup flags allergen derivatives (e.g. peanut butter when you have peanut allergy).
 
 ---
 
@@ -21,10 +23,9 @@ Built at **PatriotHacks 2026**.
 | --------------- | --------------------------------------------------------------------------------- |
 | **Frontend**    | React 19, TypeScript, Vite, Tailwind CSS v4, Lucide Icons, React Router           |
 | **Backend**     | Python 3.11+, FastAPI, Pydantic, Uvicorn                                          |
-| **AI / Vision** | Google Gemini API (ingredient extraction from images)                             |
+| **AI / Vision** | Google Gemini API (vision extraction + risk analysis — no separate scoring engine) |
 | **Voice**       | ElevenLabs API (text-to-speech for result explanations)                           |
-| **Database**    | Supabase (PostgreSQL — users, preferences, scan history)                          |
-| **Scoring**     | Custom deterministic engine (no AI — pure logic with weighted conflict detection) |
+| **Database**    | Supabase (PostgreSQL — user profiles, analysis cache)                             |
 
 ---
 
@@ -39,35 +40,31 @@ FoodFinder.AI/
 │
 ├── backend/
 │   ├── requirements.txt
-│   ├── migrations/           ← SQL migration files for Supabase
+│   ├── migrations/
+│   │   ├── 001_user_profiles.sql   ← user_profiles table
+│   │   └── 002_analysis_cache.sql  ← analysis_cache table
 │   └── app/
-│       ├── main.py           ← FastAPI entrypoint
-│       ├── config.py         ← centralized env var configuration
-│       ├── database.py       ← Supabase client initialization
-│       ├── dependencies.py   ← FastAPI dependency injection
+│       ├── main.py           ← FastAPI entrypoint, CORS, route registration, dotenv
+│       ├── config.py         ← env vars (GEMINI, SUPABASE, etc.)
+│       ├── database.py       ← Supabase client (service role)
+│       ├── dependencies.py   ← auth: Supabase API + optional JWT verification
+│       ├── models.py         ← Pydantic: AnalyzeResult, FlaggedIngredient, ProfileUpdatePayload
 │       ├── routes/
-│       │   ├── analyze.py    ← POST /analyze (core endpoint)
-│       │   ├── user.py       ← user preferences & profile
+│       │   ├── __init__.py
+│       │   ├── analyze.py    ← POST /analyze (image, include_audio, profile_json)
+│       │   ├── user.py       ← GET/PUT /user/profile (auth required)
 │       │   └── health.py     ← GET /health
 │       ├── services/
-│       │   ├── gemini_service.py      ← image → ingredient list
-│       │   ├── elevenlabs_service.py  ← text → speech audio
-│       │   ├── scoring_service.py     ← thin wrapper around engine
-│       │   └── supabase_service.py    ← DB read/write operations
-│       ├── scoring_engine/            ← fully implemented
-│       │   ├── engine.py              ← orchestrator
-│       │   ├── conflict_detector.py   ← ingredient vs. profile matching
-│       │   ├── risk_calculator.py     ← 0–100 score + risk level
-│       │   ├── ingredient_metadata.py ← 90+ ingredient database
-│       │   ├── weight_matrix.py       ← severity weights by conflict type
-│       │   └── explanation_generator.py ← human-readable summaries
-│       ├── core/
-│       │   ├── exceptions.py  ← custom error classes
-│       │   ├── logger.py      ← centralized logging
-│       │   └── utils.py       ← image decoding, text normalization
-│       └── tests/
-│           ├── test_scoring_engine.py  ← unit tests for scoring
-│           └── test_conflicts.py       ← edge case tests
+│       │   ├── __init__.py
+│       │   ├── gemini_service.py      ← vision + analysis (retry on 429)
+│       │   ├── elevenlabs_service.py  ← text → speech (MP3 bytes)
+│       │   ├── supabase_service.py    ← user profiles + analysis cache
+│       │   └── allergen_check.py     ← deterministic allergen keyword check
+│       └── core/
+│           ├── __init__.py
+│           ├── exceptions.py  ← custom error classes
+│           ├── logger.py     ← logging helper
+│           └── utils.py      ← to_title_case, etc.
 │
 └── frontend/
     ├── package.json
@@ -76,19 +73,23 @@ FoodFinder.AI/
     ├── index.html
     └── src/
         ├── main.tsx
-        ├── App.tsx               ← routing: /, /scan, /result, /profile, /settings
+        ├── App.tsx
         ├── lib/
-        │   └── utils.ts          ← cn() utility (clsx + tailwind-merge)
+        │   ├── supabase.ts   ← Supabase client
+        │   └── utils.ts      ← cn() utility (clsx + tailwind-merge)
         ├── components/
-        │   ├── landing/          ← landing page sections
+        │   ├── landing/
         │   │   ├── Navbar.tsx
         │   │   ├── Hero.tsx
         │   │   ├── About.tsx
         │   │   ├── Features.tsx
         │   │   ├── HowItWorks.tsx
         │   │   ├── TechStack.tsx
+        │   │   ├── BentoShowcase.tsx
         │   │   ├── CTA.tsx
         │   │   └── Footer.tsx
+        │   ├── ui/
+        │   │   └── button.tsx
         │   ├── CameraView.tsx
         │   ├── ScoreCircle.tsx
         │   ├── RiskBadge.tsx
@@ -101,7 +102,10 @@ FoodFinder.AI/
         │   ├── ScanScreen.tsx
         │   ├── ResultScreen.tsx
         │   ├── ProfileScreen.tsx
-        │   └── SettingsScreen.tsx
+        │   ├── SettingsScreen.tsx
+        │   └── AuthScreen.tsx
+        ├── navigation/
+        │   └── RootNavigator.tsx
         ├── context/
         │   └── UserContext.tsx
         ├── hooks/
@@ -132,20 +136,26 @@ FoodFinder.AI/
 ```
 User snaps photo of ingredient label
         ↓
-POST /analyze (image + user_id)
+POST /analyze (image, include_audio, profile_json from frontend)
         ↓
-gemini_service.extract_ingredients(image)
+gemini_service.analyze_vision(image) → product_name, brand, ingredients
         ↓
-scoring_engine.engine.analyze(ingredients, user_profile)
-    ├── conflict_detector  → find allergen/diet/processing conflicts
-    ├── risk_calculator    → compute 0–100 score + LOW/MEDIUM/HIGH
-    └── explanation_generator → build human-readable summary
+profile = get_user_profile(user_id from JWT) merged with profile_json
         ↓
-elevenlabs_service.generate_audio(explanation)
+allergen_check.check_allergens(ingredients, allergies) → deterministic flags
         ↓
-supabase_service.save_result(scan_data)
+cache_key = hash(ingredients + profile)
         ↓
-Return AnalyzeResponse → frontend displays results + plays audio
+[Cache hit?] → cached analysis + allergen_check + optional TTS
+[Cache miss] → gemini_service.analyze_ingredients(ingredients, profile)
+        ↓
+allergen_check.merge_allergen_flags(analysis, det_flags) → override if Gemini missed
+        ↓
+set_cached_analysis(cache_key, analysis)
+        ↓
+[include_audio=true?] → elevenlabs_service.text_to_speech(summary)
+        ↓
+Return AnalyzeResult → frontend displays results + plays audio
 ```
 
 ---
@@ -158,7 +168,7 @@ Return AnalyzeResponse → frontend displays results + plays audio
 - Node.js 20+
 - [Gemini API key](https://aistudio.google.com/apikey)
 - [ElevenLabs API key](https://elevenlabs.io/)
-- [Supabase project](https://supabase.com/) (URL + anon key)
+- [Supabase project](https://supabase.com/) (URL, service role key, anon key)
 
 ### 1. Clone and configure
 
@@ -176,6 +186,14 @@ cd backend
 python -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+Run the migrations in Supabase SQL Editor (in order):
+
+- `migrations/001_user_profiles.sql`
+- `migrations/002_analysis_cache.sql`
+
+```bash
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -189,56 +207,49 @@ npm run dev
 
 Open **http://localhost:5173** in your browser.
 
-### 4. Run tests
-
-```bash
-cd backend
-source venv/bin/activate
-pytest app/tests/ -v
-```
-
 > See [SETUP.md](./SETUP.md) for detailed instructions, mobile testing over LAN, and troubleshooting.
 
 ---
 
 ## Implementation Status
 
-| Component                                                           | Status                 |
-| ------------------------------------------------------------------- | ---------------------- |
-| Scoring engine (conflict detection, risk calculation, explanations) | Done                   |
-| Scoring engine tests                                                | Done                   |
-| Frontend landing page (white & orange theme)                        | Done                   |
-| Frontend routing & screen scaffolding                               | Done                   |
-| FastAPI server, routes, middleware                                  | Scaffolded (not wired) |
-| Gemini service (image → ingredients)                                | Scaffolded             |
-| ElevenLabs service (text → speech)                                  | Scaffolded             |
-| Supabase service (DB operations)                                    | Scaffolded             |
-| Database migrations                                                 | Scaffolded             |
-| Frontend scan/result/profile screens                                | Scaffolded             |
+| Component                                              | Status |
+| ------------------------------------------------------ | ------ |
+| Backend (backend/) — FastAPI, routes, services          | Done   |
+| Gemini service (vision + analysis, retry on 429)       | Done   |
+| Deterministic allergen check (allergen_check.py)       | Done   |
+| Profile fallback (profile_json from frontend)           | Done   |
+| Analysis cache (Supabase)                              | Done   |
+| ElevenLabs TTS                                         | Done   |
+| User profile (GET/PUT /user/profile, auth via Supabase API) | Done   |
+| Database migrations (user_profiles, analysis_cache)      | Done   |
+| Frontend landing, scan, result, profile, auth screens   | Done   |
 
 ---
 
 ## Database Schema
 
-Three tables in Supabase (PostgreSQL):
+Two tables in Supabase (PostgreSQL):
 
-- **users** — `id`, `email`, `created_at`
-- **user_preferences** — `allergies[]`, `dietary_preferences[]`, `health_goals[]`, `strict_mode`
-- **scan_history** — `product_name`, `raw_ingredients[]`, `normalized_ingredients[]`, `risk_score`, `risk_level`, `conflicts` (JSONB), `explanation`, `audio_url`
+- **user_profiles** — `user_id` (UUID PK), `allergies`, `dietary_restrictions`, `health_conditions`, `health_goals` (JSONB arrays)
+- **analysis_cache** — `cache_key` (text PK), `result` (JSONB)
 
 ---
 
 ## Environment Variables
 
-| Variable             | Purpose                                                   |
-| -------------------- | --------------------------------------------------------- |
-| `GEMINI_API_KEY`     | Google Gemini API for ingredient extraction               |
-| `ELEVENLABS_API_KEY` | ElevenLabs API for text-to-speech                         |
-| `SUPABASE_URL`       | Supabase project URL                                      |
-| `SUPABASE_KEY`       | Supabase anon or service key                              |
-| `BACKEND_HOST`       | Uvicorn bind host (default: `0.0.0.0`)                    |
-| `BACKEND_PORT`       | Uvicorn bind port (default: `8000`)                       |
-| `VITE_API_URL`       | Frontend → backend URL (default: `http://localhost:8000`) |
+| Variable                     | Purpose                                                   |
+| ---------------------------- | --------------------------------------------------------- |
+| `GEMINI_API_KEY`             | Google Gemini API (vision + analysis)                      |
+| `ELEVENLABS_API_KEY`         | ElevenLabs API for text-to-speech                         |
+| `SUPABASE_URL`               | Supabase project URL                                      |
+| `SUPABASE_SERVICE_ROLE_KEY`  | Supabase service role key (backend operations)            |
+| `SUPABASE_JWT_SECRET`        | Optional. Local JWT verification (faster). Omit to use Supabase API. |
+| `VITE_SUPABASE_ANON_KEY`     | Supabase anon key (frontend auth + backend token verification) |
+| `BACKEND_HOST`               | Uvicorn bind host (default: `0.0.0.0`)                     |
+| `BACKEND_PORT`               | Uvicorn bind port (default: `8000`)                       |
+| `VITE_API_URL`               | Frontend → backend URL (production)                       |
+| `VITE_SUPABASE_URL`          | Supabase URL (frontend)                                   |
 
 ---
 

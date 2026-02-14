@@ -1,17 +1,17 @@
-import { AlertTriangle, HelpCircle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import type { FlaggedIngredient } from '@/types/scanTypes';
 import { riskBgColor, riskLabel } from '@/utils/formatters';
 
 interface ConflictListProps {
   flagged: FlaggedIngredient[];
-  unknown: string[];
 }
 
 /**
- * List of flagged ingredient conflicts and unknown ingredients.
+ * List of flagged ingredient conflicts (allergies, dietary restrictions, etc.).
+ * All ingredients are shown in the main Ingredients section from Gemini.
  */
-export function ConflictList({ flagged, unknown }: ConflictListProps) {
-  if (flagged.length === 0 && unknown.length === 0) {
+export function ConflictList({ flagged }: ConflictListProps) {
+  if (flagged.length === 0) {
     return (
       <div className="rounded-xl border border-border/60 bg-card p-6 text-center">
         <p className="text-sm text-muted-foreground">
@@ -52,20 +52,6 @@ export function ConflictList({ flagged, unknown }: ConflictListProps) {
           )}
         </div>
       ))}
-
-      {unknown.length > 0 && (
-        <div className="rounded-xl border border-border/60 bg-card p-4">
-          <div className="flex items-center gap-2 mb-2">
-            <HelpCircle className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-semibold text-foreground">
-              Unknown Ingredients ({unknown.length})
-            </span>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            {unknown.join(', ')}
-          </p>
-        </div>
-      )}
     </div>
   );
 }

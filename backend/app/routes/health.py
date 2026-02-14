@@ -1,15 +1,11 @@
-"""
-Health Route — GET /health
-
-Health check for load balancers and monitoring.
-"""
+"""GET /health — Health check."""
 
 from fastapi import APIRouter
 
-router = APIRouter(tags=["health"])
+router = APIRouter()
 
 
-@router.get("/health")
-def health() -> dict:
-    """Return service status."""
+@router.get("/")
+def health():
+    """Health check endpoint."""
     return {"status": "ok"}

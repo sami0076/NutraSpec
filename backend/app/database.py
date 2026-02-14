@@ -1,8 +1,7 @@
 """
 Database — Supabase Client
 
-Provides a shared Supabase client for the application.
-Initialized lazily to avoid import-time env errors.
+Provides the Supabase client for user profiles and analysis cache.
 """
 
 from __future__ import annotations
@@ -13,21 +12,17 @@ from supabase import Client, create_client
 
 from app.config import get_settings
 
-
 _client: Optional[Client] = None
 
 
 def get_supabase_client() -> Client:
-    """
-    Return the shared Supabase client. Creates it on first call.
-
-    Raises:
-        ValueError: If SUPABASE_URL or SUPABASE_KEY is not set.
-    """
+    """Return the shared Supabase client (service role for backend ops)."""
     global _client
     if _client is None:
         settings = get_settings()
-        if not settings.supabase_url or not settings.supabase_key:
-            raise ValueError("SUPABASE_URL and SUPABASE_KEY must be set")
-        _client = create_client(settings.supabase_url, settings.supabase_key)
+        url = settings.supabase_url
+        key = settings.supabase_service_role_key or settings.supabase_key
+        if not url or not key:
+            raise ValueError("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set")
+        _client = create_client(url, key)
     return _client
