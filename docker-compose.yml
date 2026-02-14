@@ -1,0 +1,25 @@
+# FoodFinder.AI — run web + backend with Docker
+# From repo root: docker compose up --build
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "4000:4000"
+    env_file:
+      - apps/backend/.env
+    volumes:
+      - ./apps/backend/src:/app/apps/backend/src
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./apps/web/src:/app/apps/web/src
+      - ./apps/web/index.html:/app/apps/web/index.html
+      - ./apps/web/vite.config.ts:/app/apps/web/vite.config.ts

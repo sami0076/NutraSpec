@@ -1,0 +1,22 @@
+{
+  "name": "foodfinder-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI Ingredient Risk Scoring App — Gemini extraction + deterministic scoring",
+  "scripts": {
+    "dev:backend": "pnpm --filter backend dev",
+    "dev:web": "pnpm --filter web dev",
+    "dev:web:mobile": "pnpm --filter web dev:mobile",
+    "build:backend": "pnpm --filter backend build",
+    "build:web": "pnpm --filter web build",
+    "build:web:mobile": "pnpm --filter web build:mobile",
+    "test:scoring": "pnpm --filter scoring-engine test",
+    "test": "pnpm -r test"
+  },
+  "keywords": ["ingredient", "risk", "gemini", "supabase", "elevenlabs"],
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.0.0"
+}
