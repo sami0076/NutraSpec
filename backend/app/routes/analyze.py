@@ -81,7 +81,8 @@ def _ensure_list(val) -> list:
     return []
 
 
-@router.post("/", response_model=AnalyzeResult)
+@router.post("", response_model=AnalyzeResult)
+@router.post("/", response_model=AnalyzeResult, include_in_schema=False)
 async def analyze(
     image: UploadFile = File(...),
     include_audio: str = Form("false"),

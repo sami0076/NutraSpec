@@ -37,6 +37,7 @@ app = FastAPI(
     description="AI-powered ingredient risk analysis for food labels",
     version="1.0.0",
     lifespan=lifespan,
+    redirect_slashes=False,
 )
 
 app.add_middleware(
