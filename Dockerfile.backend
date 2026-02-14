@@ -1,19 +1,10 @@
-# Backend API (Express + Gemini + Eleven Labs + Scoring Engine)
-FROM node:20-alpine
+FROM python:3.12-slim
 
 WORKDIR /app
 
-RUN corepack enable && corepack prepare pnpm@9 --activate
+COPY backend/requirements.txt backend/main.py backend/scoring_engine ./backend/
+RUN pip install --no-cache-dir -r backend/requirements.txt
 
-COPY package.json pnpm-workspace.yaml ./
-COPY apps/backend/package.json ./apps/backend/
-COPY packages/scoring-engine/package.json ./packages/scoring-engine/
-COPY packages/shared-types/package.json ./packages/shared-types/
-
-RUN pnpm install --frozen-lockfile || pnpm install
-
-COPY . .
-
+WORKDIR /app/backend
 EXPOSE 4000
-
-CMD ["pnpm", "dev:backend"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "4000", "--reload"]
