@@ -1,6 +1,5 @@
 """
 Database — Supabase Client
-==========================
 
 Provides a shared Supabase client for the application.
 Initialized lazily to avoid import-time env errors.

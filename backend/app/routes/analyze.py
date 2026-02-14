@@ -1,6 +1,5 @@
 """
 Analyze Route — POST /analyze
-=============================
 
 Receives image, extracts ingredients via Gemini, scores via engine,
 returns risk result. Optionally includes TTS audio of summary.

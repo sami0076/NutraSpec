@@ -1,7 +1,5 @@
 """
 ElevenLabs Service — Text-to-Speech
-====================================
-
 Converts analysis summary text to audio for the AudioPlayer component.
 """
 
@@ -13,18 +11,15 @@ from typing import Optional
 from elevenlabs.client import ElevenLabs
 
 
-# ---------------------------------------------------------------------------
 # Defaults
-# ---------------------------------------------------------------------------
+
 
 DEFAULT_VOICE_ID = "21m00Tcm4TlvDq8ikWAM"  # Rachel
 DEFAULT_MODEL = "eleven_multilingual_v2"
 DEFAULT_OUTPUT_FORMAT = "mp3_44100_128"
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def text_to_speech(
     text: str,
@@ -37,7 +32,7 @@ def text_to_speech(
     Convert text to speech using ElevenLabs API.
 
     Args:
-        text: Text to convert (e.g. analysis summary).
+        text: Text to convert (analysis summary).
         api_key: ElevenLabs API key. If None, uses ELEVENLABS_API_KEY env var.
         voice_id: Voice ID (default: Rachel).
         model_id: Model ID (default: eleven_multilingual_v2).

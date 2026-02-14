@@ -17,9 +17,7 @@ from __future__ import annotations
 from app.scoring_engine.risk_calculator import classify_score
 
 
-# ---------------------------------------------------------------------------
 # Severity Label Thresholds
-# ---------------------------------------------------------------------------
 
 def _severity_label(weight: float) -> str:
     """
@@ -37,9 +35,7 @@ def _severity_label(weight: float) -> str:
     return "Low Risk"
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def generate_explanations(
     conflicts: list[dict],
@@ -85,9 +81,7 @@ def generate_explanations(
     }
 
 
-# ---------------------------------------------------------------------------
 # Internal Helpers
-# ---------------------------------------------------------------------------
 
 def _build_flagged_list(
     conflicts: list[dict],

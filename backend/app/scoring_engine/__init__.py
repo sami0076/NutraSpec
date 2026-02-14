@@ -1,6 +1,5 @@
 """
 Scoring Engine Package
-======================
 
 Deterministic ingredient risk scoring engine.
 

@@ -1,6 +1,5 @@
 """
 Dependencies — FastAPI Dependency Injection
-============================================
 
 Provides injectable dependencies for route handlers.
 """

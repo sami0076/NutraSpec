@@ -1,6 +1,5 @@
 """
 Config — Environment Variables
-==============================
 
 Reads and exposes environment variables for the backend.
 Load .env via python-dotenv before importing this module (e.g. in main.py).

@@ -1,6 +1,5 @@
 """
 User Route — Profile CRUD
-===========================
 
 GET /user/profile — fetch user profile
 PUT /user/profile — update user profile
@@ -18,9 +17,8 @@ from app.services.supabase_service import get_user_profile, update_user_profile
 router = APIRouter(prefix="/user", tags=["user"])
 
 
-# ---------------------------------------------------------------------------
 # Schemas
-# ---------------------------------------------------------------------------
+
 
 
 class ProfileUpdate(BaseModel):
@@ -39,9 +37,7 @@ class ProfileUpdate(BaseModel):
     )
 
 
-# ---------------------------------------------------------------------------
 # Endpoints
-# ---------------------------------------------------------------------------
 
 
 @router.get("/profile")

@@ -1,6 +1,5 @@
 """
 Core Package
-=============
 
 Exceptions, logger, and shared utilities.
 """

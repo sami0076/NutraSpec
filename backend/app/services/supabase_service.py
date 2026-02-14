@@ -1,6 +1,5 @@
 """
 Supabase Service — User Profile Storage
-========================================
 
 Fetches user profile for scoring. The profile is used by the scoring engine
 to personalize ingredient risk analysis.
@@ -21,9 +20,7 @@ from typing import Any, Optional
 from supabase import create_client, Client
 
 
-# ---------------------------------------------------------------------------
 # Default Profile (when user not found or no profile)
-# ---------------------------------------------------------------------------
 
 EMPTY_PROFILE = {
     "allergies": [],
@@ -35,9 +32,7 @@ EMPTY_PROFILE = {
 TABLE_NAME = "user_profiles"
 
 
-# ---------------------------------------------------------------------------
 # Client Singleton
-# ---------------------------------------------------------------------------
 
 _client: Optional[Client] = None
 
@@ -54,9 +49,7 @@ def _get_client() -> Client:
     return _client
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def get_user_profile(user_id: str) -> dict:
     """

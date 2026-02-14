@@ -1,6 +1,5 @@
 """
 Core Logger
-============
 
 Centralized logging configuration for the application.
 """

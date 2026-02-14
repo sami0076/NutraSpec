@@ -1,6 +1,5 @@
 """
 Scoring Service — Wrapper for Deterministic Risk Engine
-========================================================
 
 Thin wrapper around the scoring engine. Receives ingredients and user profile,
 returns the engine's structured output.
@@ -10,7 +9,6 @@ This service does NOT:
 - Call Gemini
 - Use AI or computer vision
 
-It is purely deterministic logic.
 """
 
 from __future__ import annotations
@@ -18,9 +16,7 @@ from __future__ import annotations
 from app.scoring_engine import analyze
 
 
-# ---------------------------------------------------------------------------
 # Profile Keys (must match scoring engine)
-# ---------------------------------------------------------------------------
 
 REQUIRED_PROFILE_KEYS = {
     "allergies",
@@ -41,9 +37,7 @@ def _ensure_profile_shape(profile: dict) -> dict:
     return result
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def score_ingredients(
     ingredients: list[str],

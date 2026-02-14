@@ -1,6 +1,5 @@
 """
 Weight Matrix
-=============
 
 Maps ingredient risk tags to the user-profile dimensions they conflict with
 and assigns numeric severity weights (0.0 – 1.0) used by the risk calculator.
@@ -19,20 +18,18 @@ Weight scale:
 """
 
 
-# ---------------------------------------------------------------------------
 # Tag → Conflict Mapping
-# ---------------------------------------------------------------------------
 # Each risk tag (from ingredient_metadata) maps to a list of potential
 # conflicts.  Every conflict specifies:
 #     conflict_type  – which profile dimension to check
 #     profile_value  – the specific value within that dimension
 #     weight         – severity penalty (0.0–1.0)
 #     label          – short human-readable reason (used by explanation gen)
-# ---------------------------------------------------------------------------
+
 
 TAG_CONFLICT_MAP: dict[str, list[dict]] = {
 
-    # ── Allergen Tags ──────────────────────────────────────────────────────
+    # Allergen Tags 
     # Allergen matches are always the highest severity (1.0).
 
     "allergen_peanut": [
@@ -108,7 +105,7 @@ TAG_CONFLICT_MAP: dict[str, list[dict]] = {
         },
     ],
 
-    # ── Dietary Restriction Tags ───────────────────────────────────────────
+    # Dietary Restriction Tags 
 
     "animal_derived": [
         {
@@ -147,7 +144,7 @@ TAG_CONFLICT_MAP: dict[str, list[dict]] = {
         },
     ],
 
-    # ── Health Condition Tags ──────────────────────────────────────────────
+    # Health Condition Tags 
 
     "high_glycemic": [
         {
@@ -242,7 +239,7 @@ TAG_CONFLICT_MAP: dict[str, list[dict]] = {
         },
     ],
 
-    # ── Health Goal Tags ───────────────────────────────────────────────────
+    # Health Goal Tags 
 
     "high_calorie": [
         {
@@ -261,7 +258,7 @@ TAG_CONFLICT_MAP: dict[str, list[dict]] = {
         },
     ],
 
-    # ── Artificial / Processed Tags ────────────────────────────────────────
+    # Artificial / Processed Tags 
 
     "artificial_additive": [
         {
@@ -306,9 +303,7 @@ TAG_CONFLICT_MAP: dict[str, list[dict]] = {
 }
 
 
-# ---------------------------------------------------------------------------
 # Penalty Points Configuration
-# ---------------------------------------------------------------------------
 # Base points deducted per conflict, before being multiplied by the weight.
 # Separated by conflict type so allergen hits are far more punishing.
 # ---------------------------------------------------------------------------
@@ -321,9 +316,7 @@ PENALTY_POINTS: dict[str, float] = {
 }
 
 
-# ---------------------------------------------------------------------------
 # Lookup Helpers
-# ---------------------------------------------------------------------------
 
 def get_conflicts_for_tag(tag: str) -> list[dict]:
     """

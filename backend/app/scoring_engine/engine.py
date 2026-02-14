@@ -1,6 +1,5 @@
 """
 Scoring Engine — Orchestrator
-==============================
 
 Top-level entry point for the ingredient risk scoring pipeline.
 
@@ -37,9 +36,7 @@ from app.scoring_engine.risk_calculator import calculate_risk
 from app.scoring_engine.explanation_generator import generate_explanations
 
 
-# ---------------------------------------------------------------------------
 # Input Validation
-# ---------------------------------------------------------------------------
 
 _REQUIRED_PROFILE_KEYS = {
     "allergies",
@@ -93,9 +90,7 @@ def _validate_inputs(
     return cleaned_ingredients, cleaned_profile
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def analyze(
     ingredients: list[str],

@@ -1,6 +1,5 @@
 """
 Ingredient Metadata Database
-============================
 
 Static dictionary mapping ingredient names to structured metadata used by the
 scoring engine's conflict detector and weight matrix.
@@ -16,11 +15,8 @@ Designed to be easily extensible — add new entries to INGREDIENT_DB as needed.
 from typing import Optional
 
 
-# ---------------------------------------------------------------------------
 # Ingredient Database
-# ---------------------------------------------------------------------------
 # Keys are normalized (lowercase, stripped) ingredient names.
-#
 # Tag naming conventions:
 #   allergen_*         – maps to user allergies
 #   animal_derived     – conflicts with vegan / vegetarian
@@ -37,11 +33,10 @@ from typing import Optional
 #   artificial_*       – conflicts with clean_eating
 #   processed          – conflicts with clean_eating
 #   preservative       – informational tag
-# ---------------------------------------------------------------------------
 
 INGREDIENT_DB: dict[str, dict] = {
 
-    # ── Major Allergens ────────────────────────────────────────────────────
+    # Major Allergens 
 
     "peanuts": {
         "category": "allergen",
@@ -169,7 +164,7 @@ INGREDIENT_DB: dict[str, dict] = {
         "description": "Oil derived from sesame seeds.",
     },
 
-    # ── Sweeteners & Sugars ────────────────────────────────────────────────
+    # Sweeteners & Sugars 
 
     "sugar": {
         "category": "sweetener",
@@ -212,7 +207,7 @@ INGREDIENT_DB: dict[str, dict] = {
         "description": "Bee-produced sweetener; not suitable for strict vegans.",
     },
 
-    # ── Oils & Fats ────────────────────────────────────────────────────────
+    # Oils & Fats 
 
     "palm oil": {
         "category": "oil",
@@ -267,7 +262,7 @@ INGREDIENT_DB: dict[str, dict] = {
         "description": "Heart-healthy monounsaturated oil.",
     },
 
-    # ── Additives & Preservatives ──────────────────────────────────────────
+    # Additives & Preservatives 
 
     "maltodextrin": {
         "category": "additive",
@@ -330,7 +325,7 @@ INGREDIENT_DB: dict[str, dict] = {
         "description": "Common thickener; generally well tolerated.",
     },
 
-    # ── Artificial Colors ──────────────────────────────────────────────────
+    # Artificial Colors 
 
     "red 40": {
         "category": "artificial_color",
@@ -358,7 +353,7 @@ INGREDIENT_DB: dict[str, dict] = {
         "description": "Processed coloring agent; may contain 4-MEI.",
     },
 
-    # ── Animal-Derived (non-allergen) ──────────────────────────────────────
+    # Animal-Derived (non-allergen) 
 
     "gelatin": {
         "category": "animal_product",
@@ -366,7 +361,7 @@ INGREDIENT_DB: dict[str, dict] = {
         "description": "Derived from animal collagen; not suitable for vegans/vegetarians.",
     },
 
-    # ── Sodium-Heavy ───────────────────────────────────────────────────────
+    # Sodium-Heavy 
 
     "salt": {
         "category": "mineral",
@@ -379,7 +374,7 @@ INGREDIENT_DB: dict[str, dict] = {
         "description": "Sodium-based additive; emulsifier and leavening agent.",
     },
 
-    # ── Generally Safe / Neutral ───────────────────────────────────────────
+    # Generally Safe / Neutral 
 
     "water": {
         "category": "base",
@@ -419,9 +414,7 @@ INGREDIENT_DB: dict[str, dict] = {
 }
 
 
-# ---------------------------------------------------------------------------
 # Lookup Helpers
-# ---------------------------------------------------------------------------
 
 def _normalize(name: str) -> str:
     """Normalize an ingredient name for consistent DB lookups."""

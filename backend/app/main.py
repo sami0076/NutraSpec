@@ -1,8 +1,7 @@
 """
 FoodFinder.AI — FastAPI Entrypoint
-===================================
 
-AI-powered ingredient risk scoring. Image → Gemini extraction → Scoring engine.
+AI-powered ingredient risk scoring. Image to Gemini extraction to Scoring engine.
 """
 
 from contextlib import asynccontextmanager

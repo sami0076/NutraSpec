@@ -1,6 +1,6 @@
 """
 Conflict Detector
-=================
+
 
 Core comparison logic that takes an ingredient list and a user profile,
 then identifies every conflict between the two.
@@ -23,9 +23,7 @@ from app.scoring_engine.ingredient_metadata import get_metadata
 from app.scoring_engine.weight_matrix import get_conflicts_for_tag
 
 
-# ---------------------------------------------------------------------------
 # Profile Dimension Keys
-# ---------------------------------------------------------------------------
 # These must match the keys in the user_profile dict.
 
 PROFILE_DIMENSIONS: dict[str, str] = {
@@ -36,9 +34,7 @@ PROFILE_DIMENSIONS: dict[str, str] = {
 }
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def detect_conflicts(
     ingredients: list[str],
@@ -114,9 +110,7 @@ def get_flagged_ingredients(conflicts: list[dict]) -> set[str]:
     }
 
 
-# ---------------------------------------------------------------------------
 # Internal Helpers
-# ---------------------------------------------------------------------------
 
 def _normalize_profile(user_profile: dict) -> dict[str, set[str]]:
     """

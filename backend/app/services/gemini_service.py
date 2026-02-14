@@ -1,8 +1,7 @@
 """
 Gemini Service — Ingredient Extraction
-=======================================
 
-Image → structured ingredient list via Gemini vision API.
+Turns image to structured ingredient list via Gemini vision API.
 
 This service performs extraction only. It does NOT:
 - Calculate risk
@@ -23,9 +22,7 @@ from google.genai import types
 from pydantic import BaseModel
 
 
-# ---------------------------------------------------------------------------
 # Response Schema
-# ---------------------------------------------------------------------------
 
 class IngredientExtraction(BaseModel):
     """Structured output from Gemini for ingredient extraction."""
@@ -33,11 +30,10 @@ class IngredientExtraction(BaseModel):
     ingredients: list[str]
 
 
-# ---------------------------------------------------------------------------
 # Constants
-# ---------------------------------------------------------------------------
 
-EXTRACTION_PROMPT = """Extract all ingredient names from this food product label image.
+
+EXTRACTION_PROMPT = """Extract all ingredient names from this food product label image using the following rules:
 
 Rules:
 - List each ingredient exactly as it appears on the label, in order when possible
@@ -50,9 +46,8 @@ Rules:
 DEFAULT_MODEL = "gemini-2.0-flash"
 
 
-# ---------------------------------------------------------------------------
+
 # Exceptions
-# ---------------------------------------------------------------------------
 
 class GeminiExtractionError(Exception):
     """Raised when ingredient extraction fails."""
@@ -60,9 +55,7 @@ class GeminiExtractionError(Exception):
     pass
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def extract_ingredients_from_image(
     image_bytes: bytes,

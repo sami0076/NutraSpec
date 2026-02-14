@@ -1,6 +1,5 @@
 """
 Risk Calculator
-===============
 
 Takes the list of conflicts produced by the conflict detector and computes:
 
@@ -25,9 +24,7 @@ from __future__ import annotations
 from app.scoring_engine.weight_matrix import get_penalty_points
 
 
-# ---------------------------------------------------------------------------
 # Risk Tier Thresholds
-# ---------------------------------------------------------------------------
 
 LOW_RISK_THRESHOLD = 70
 MEDIUM_RISK_THRESHOLD = 40
@@ -37,9 +34,7 @@ TIER_MEDIUM = "Medium Risk"
 TIER_HIGH = "High Risk"
 
 
-# ---------------------------------------------------------------------------
 # Public API
-# ---------------------------------------------------------------------------
 
 def calculate_risk(
     conflicts: list[dict],
@@ -111,9 +106,7 @@ def classify_score(score: int) -> str:
     return _classify(score)
 
 
-# ---------------------------------------------------------------------------
 # Internal Helpers
-# ---------------------------------------------------------------------------
 
 def _compute_total_penalty(conflicts: list[dict]) -> float:
     """

@@ -1,6 +1,5 @@
 """
 Health Route — GET /health
-===========================
 
 Health check for load balancers and monitoring.
 """
