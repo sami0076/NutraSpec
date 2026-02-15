@@ -5,7 +5,7 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY ?? '';
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error(
-    '[FoodFinder.AI] VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be set. ' +
+    '[NutraSpec] VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be set. ' +
     'Auth will not work. Make sure your .env is at the repo root.',
   );
 }

@@ -69,14 +69,14 @@ export default function AuthScreen() {
           <Leaf className="h-5 w-5 text-primary-foreground" />
         </div>
         <span className="text-xl font-bold tracking-tight text-foreground">
-          FoodFinder<span className="text-primary">.AI</span>
+          NutraSpec
         </span>
       </Link>
 
       {/* Card */}
       <div className="w-full max-w-sm rounded-2xl border border-border/60 bg-card p-8 shadow-lg shadow-primary/5">
         <h1 className="text-2xl font-light text-foreground font-serif text-center">
-          Welcome to FoodFinder.AI
+          Welcome to NutraSpec
         </h1>
         <p className="mt-2 text-sm text-muted-foreground text-center">
           Sign in to access personalized ingredient risk scoring, save your

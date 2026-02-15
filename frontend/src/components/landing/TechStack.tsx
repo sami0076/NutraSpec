@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 
 const techItems = [
   {
@@ -44,19 +44,11 @@ const tickerItems = [
 ];
 
 export function TechStack() {
-  const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const gridInView = useInView(gridRef, { once: true, margin: '-80px' });
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const tickerX = useTransform(scrollYProgress, [0, 1], [0, -300]);
-
   return (
-    <section id="tech-stack" ref={sectionRef} className="relative py-24 md:py-32">
+    <section id="tech-stack" className="relative py-24 md:py-32">
       <div className="mx-auto max-w-6xl px-6">
         {/* Section header with motion */}
         <div className="mx-auto max-w-2xl text-center">
@@ -124,13 +116,13 @@ export function TechStack() {
           ))}
         </div>
 
-        {/* Scroll-driven horizontal ticker */}
+        {/* Auto-sliding horizontal ticker (seamless loop) */}
         <div className="relative mt-16 overflow-hidden">
-          <div className="absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-background to-transparent" />
-          <div className="absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-background to-transparent" />
-          <motion.div
-            className="flex gap-12 whitespace-nowrap py-4"
-            style={{ x: tickerX }}
+          <div className="absolute left-0 top-0 z-10 h-full w-24 bg-gradient-to-r from-background to-transparent pointer-events-none" />
+          <div className="absolute right-0 top-0 z-10 h-full w-24 bg-gradient-to-l from-background to-transparent pointer-events-none" />
+          <div
+            className="flex gap-12 whitespace-nowrap py-4 w-max"
+            style={{ animation: 'marquee 35s linear infinite' }}
           >
             {[...tickerItems, ...tickerItems].map((label, i) => (
               <span
@@ -140,7 +132,7 @@ export function TechStack() {
                 {label}
               </span>
             ))}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

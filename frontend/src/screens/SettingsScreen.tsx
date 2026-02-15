@@ -20,7 +20,7 @@ export default function SettingsScreen() {
               <Leaf className="h-3.5 w-3.5 text-primary-foreground" />
             </div>
             <span className="text-sm font-bold text-foreground">
-              FoodFinder<span className="text-primary">.AI</span>
+              NutraSpec
             </span>
           </div>
           <div className="w-12" />
@@ -59,7 +59,7 @@ export default function SettingsScreen() {
           {/* About */}
           <div className="rounded-xl border border-border/60 bg-card p-5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-primary mb-2">
-              About FoodFinder.AI
+              About NutraSpec
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               AI-powered ingredient risk scoring app built at PatriotHacks 2026.
@@ -121,7 +121,7 @@ export default function SettingsScreen() {
         </div>
 
         <p className="mt-10 text-center text-xs text-muted-foreground">
-          FoodFinder.AI v1.0.0 &mdash; PatriotHacks 2026
+          NutraSpec v1.0.0 &mdash; PatriotHacks 2026
         </p>
       </div>
     </div>

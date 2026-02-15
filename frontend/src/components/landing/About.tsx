@@ -28,7 +28,7 @@ const stats = [
 ];
 
 const descriptionText =
-  'FoodFinder.AI combines the power of Google Gemini vision with a fully deterministic scoring engine to give you accurate, unbiased ingredient risk scores. No AI guessing on your safety &mdash; just pure logic with weighted conflict detection.';
+  'NutraSpec combines the power of Google Gemini vision with a fully deterministic scoring engine to give you accurate, unbiased ingredient risk scores. No AI guessing on your safety &mdash; just pure logic with weighted conflict detection.';
 
 export function About() {
   const leftRef = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export function About() {
               transition={{ duration: 0.5 }}
               className="text-sm font-semibold uppercase tracking-wider text-primary"
             >
-              About FoodFinder.AI
+              About NutraSpec
             </motion.span>
 
             <motion.h2

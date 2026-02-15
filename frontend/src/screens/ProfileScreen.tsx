@@ -183,7 +183,7 @@ export default function ProfileScreen() {
               <Leaf className="h-3.5 w-3.5 text-primary-foreground" />
             </div>
             <span className="text-sm font-bold text-foreground">
-              FoodFinder<span className="text-primary">.AI</span>
+              NutraSpec
             </span>
           </div>
           <Link

@@ -90,7 +90,7 @@ export function BentoShowcase() {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="mt-4 text-lg leading-relaxed text-muted-foreground font-light"
           >
-            A closer look at what makes FoodFinder.AI the smartest way to
+            A closer look at what makes NutraSpec the smartest way to
             understand your food.
           </motion.p>
         </div>
