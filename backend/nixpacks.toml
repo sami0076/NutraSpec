@@ -1,0 +1,6 @@
+# Nixpacks configuration for Railway
+# Let Nixpacks auto-detect Python and install from requirements.txt
+# We only override the start command to ensure correct PORT binding
+
+[start]
+cmd = "python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"

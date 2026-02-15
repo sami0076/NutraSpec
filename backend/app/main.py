@@ -2,6 +2,7 @@
 FoodFinder.AI Backend — FastAPI Application
 
 Endpoints:
+  GET  /            — Root (alive check)
   POST /analyze     — Analyze food label image (multipart: image + include_audio)
   GET  /user/profile — Get user profile (auth required)
   PUT  /user/profile — Update user profile (auth required)
@@ -10,26 +11,68 @@ Endpoints:
 
 from __future__ import annotations
 
+import logging
+import os
+import sys
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from dotenv import load_dotenv
+# ---------------------------------------------------------------------------
+# .env loading — try multiple locations so it works locally and on Railway
+# On Railway, env vars come from the dashboard, so missing .env is fine.
+# ---------------------------------------------------------------------------
+try:
+    from dotenv import load_dotenv
 
-# Load .env from project root or backend/
-_root = Path(__file__).resolve().parents[2]
-load_dotenv(_root / ".env")
-load_dotenv(_root / "backend" / ".env")  # fallback if .env lives in backend/
+    _this_dir = Path(__file__).resolve().parent          # backend/app/
+    _backend_dir = _this_dir.parent                      # backend/
+    _project_root = _backend_dir.parent                  # project root
 
+    for candidate in [
+        _project_root / ".env",       # <project>/.env  (local dev)
+        _backend_dir / ".env",        # backend/.env    (alt local layout)
+        Path.cwd() / ".env",          # cwd fallback    (Railway sets cwd)
+    ]:
+        if candidate.exists():
+            load_dotenv(candidate)
+            break
+except Exception:
+    pass  # dotenv is optional on Railway — env vars come from dashboard
+
+# ---------------------------------------------------------------------------
+# Logging — so Railway captures startup info / errors
+# ---------------------------------------------------------------------------
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    stream=sys.stdout,
+)
+logger = logging.getLogger("foodfinder")
+logger.info("Starting FoodFinder.AI backend...")
+logger.info("Python %s", sys.version)
+logger.info("CWD: %s", os.getcwd())
+
+# ---------------------------------------------------------------------------
+# FastAPI app
+# ---------------------------------------------------------------------------
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
-from app.routes import analyze, health, user
-
+try:
+    from app.routes import analyze, health, user
+    logger.info("All route modules imported successfully")
+except Exception as exc:
+    logger.exception("FATAL — failed to import route modules: %s", exc)
+    raise
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Startup/shutdown lifecycle."""
+    port = os.environ.get("PORT", "?")
+    logger.info("App is alive — listening on PORT=%s", port)
     yield
+    logger.info("Shutting down...")
 
 
 app = FastAPI(
@@ -40,14 +83,49 @@ app = FastAPI(
     redirect_slashes=False,
 )
 
+# ---------------------------------------------------------------------------
+# CORS — explicitly list allowed origins so preflight works reliably
+# ---------------------------------------------------------------------------
+_cors_origins = [
+    "https://food-finder-2gp8q3ls6-sami0076s-projects.vercel.app",
+    "https://food-finder-ai-six.vercel.app",
+    "http://localhost:5173",   # Vite dev server
+    "http://localhost:8000",   # local backend (for Swagger UI)
+]
+# Also pull from FRONTEND_URL env var (Vercel URL, ngrok URL, etc.)
+_extra = os.environ.get("FRONTEND_URL", "").strip().rstrip("/")
+if _extra and _extra not in _cors_origins:
+    _cors_origins.append(_extra)
+
+logger.info("CORS allowed origins: %s", _cors_origins)
+
+# Regex to also match any ngrok subdomain (URL changes each restart)
+_cors_regex = r"https://.*\.ngrok(-free)?\.app"
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=_cors_origins,
+    allow_origin_regex=_cors_regex,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=3600,
 )
 
+# ---------------------------------------------------------------------------
+# Root endpoint — basic alive check (no auth, no deps)
+# ---------------------------------------------------------------------------
+@app.get("/")
+async def root():
+    return JSONResponse({"status": "ok", "service": "FoodFinder.AI API"})
+
+
+# ---------------------------------------------------------------------------
+# Routers
+# ---------------------------------------------------------------------------
 app.include_router(analyze.router, prefix="/analyze", tags=["analyze"])
 app.include_router(user.router)
 app.include_router(health.router, prefix="/health", tags=["health"])
+
+logger.info("All routers registered. App ready.")
