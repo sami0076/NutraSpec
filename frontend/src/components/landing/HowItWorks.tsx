@@ -36,8 +36,8 @@ const steps = [
 const pipeline = [
   { label: 'Photo Input', sub: 'Camera / Upload' },
   { label: 'Gemini Vision', sub: 'Ingredient Extraction' },
-  { label: 'Scoring Engine', sub: 'Conflict Detection' },
-  { label: 'Risk Report', sub: 'Score + Audio' },
+  { label: 'Risk Report', sub: 'Conflict Detection' },
+  { label: 'Audio Output', sub: 'Eleven Labs API' },
 ];
 
 export function HowItWorks() {
@@ -57,7 +57,7 @@ export function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-sm font-semibold uppercase tracking-wider text-primary"
+            className="text-base font-semibold uppercase tracking-wider text-primary"
           >
             How It Works
           </motion.span>
@@ -75,7 +75,7 @@ export function HowItWorks() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-lg leading-relaxed text-muted-foreground font-light"
+            className="mt-4 text-xl leading-relaxed text-muted-foreground font-light"
           >
             Four simple steps to understand exactly what goes into your body.
           </motion.p>
@@ -104,7 +104,7 @@ export function HowItWorks() {
 
               <div className="flex flex-col items-start">
                 <div className="flex items-center gap-3">
-                  <span className="font-mono text-xs font-bold text-primary/60">
+                  <span className="font-mono text-sm font-bold text-primary/60">
                     {step.number}
                   </span>
                   <div className="h-px flex-1 bg-border lg:hidden" />
@@ -114,10 +114,10 @@ export function HowItWorks() {
                   <step.icon className="h-6 w-6" />
                 </div>
 
-                <h3 className="mt-5 text-xl font-semibold text-foreground">
+                <h3 className="mt-5 text-2xl font-semibold text-foreground">
                   {step.title}
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-base leading-relaxed text-muted-foreground">
                   {step.description}
                 </p>
               </div>
@@ -140,10 +140,10 @@ export function HowItWorks() {
                 className="flex items-center gap-4 md:flex-1"
               >
                 <div className="flex-1 rounded-xl border border-border/50 bg-card p-4 text-center">
-                  <p className="text-sm font-semibold text-foreground">
+                  <p className="text-base font-semibold text-foreground">
                     {item.label}
                   </p>
-                  <p className="text-xs text-muted-foreground">{item.sub}</p>
+                  <p className="text-sm text-muted-foreground">{item.sub}</p>
                 </div>
                 {i < 3 && (
                   <div className="hidden text-primary/40 md:block">

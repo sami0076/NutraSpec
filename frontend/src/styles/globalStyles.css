@@ -14,32 +14,34 @@
   /* --- Color palette --- */
 
   --color-background: hsl(46 58% 93%);
-  --color-foreground: hsl(0 40% 12%);
+  /* Regular text: 20% darker (was 12% lightness) */
+  --color-foreground: hsl(0 40% 9%);
 
   --color-card: hsl(44 40% 88%);
-  --color-card-foreground: hsl(0 40% 12%);
+  --color-card-foreground: hsl(0 40% 9%);
 
   --color-popover: hsl(45 45% 90%);
-  --color-popover-foreground: hsl(0 40% 12%);
+  --color-popover-foreground: hsl(0 40% 9%);
 
   /* Primary: oxblood */
   --color-primary: hsl(0 90% 15%);
   --color-primary-foreground: hsl(46 58% 93%);
 
   --color-secondary: hsl(44 30% 85%);
-  --color-secondary-foreground: hsl(0 60% 14%);
+  --color-secondary-foreground: hsl(0 60% 11%);
 
   --color-muted: hsl(44 25% 83%);
-  --color-muted-foreground: hsl(0 12% 42%);
+  /* Muted/regular secondary text: 20% darker (was 42% lightness) */
+  --color-muted-foreground: hsl(0 12% 33%);
 
   --color-accent: hsl(44 28% 82%);
-  --color-accent-foreground: hsl(0 70% 16%);
+  --color-accent-foreground: hsl(0 70% 12%);
 
   --color-destructive: hsl(0 72% 51%);
   --color-destructive-foreground: hsl(46 58% 93%);
 
   --color-warning: hsl(38 92% 50%);
-  --color-warning-foreground: hsl(0 40% 12%);
+  --color-warning-foreground: hsl(0 40% 9%);
 
   --color-success: hsl(142 71% 45%);
   --color-success-foreground: hsl(0 0% 100%);
@@ -58,6 +60,11 @@
   --font-sans: "DM Sans", system-ui, -apple-system, sans-serif;
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-mono: "Space Mono", ui-monospace, monospace;
+
+  /* --- Body/regular text: 50% larger (titles keep default scale) --- */
+  --font-size-sm: 1.3125rem;   /* 0.875 × 1.5 */
+  --font-size-base: 1.5rem;     /* 1rem × 1.5 */
+  --font-size-lg: 1.6875rem;   /* 1.125 × 1.5 */
 
   /* --- Animations --- */
   --animate-marquee: marquee 30s linear infinite;
@@ -139,6 +146,7 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    font-size: 1.5rem; /* regular text 50% larger */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

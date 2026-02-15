@@ -37,7 +37,7 @@ function TechBadge({ item }: { item: string }) {
   const slug = TECH_ICONS[item];
   const iconUrl = slug ? `${ICON_CDN}/${slug}` : null;
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-background/80 px-2.5 py-1 text-xs font-medium text-foreground">
+    <span className="inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-background/80 px-2.5 py-1 text-sm font-medium text-foreground">
       {iconUrl ? (
         <img src={iconUrl} alt="" className="h-3.5 w-3.5 shrink-0" width={14} height={14} />
       ) : null}
@@ -90,7 +90,7 @@ export function TechStack() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-sm font-semibold uppercase tracking-wider text-primary"
+            className="text-base font-semibold uppercase tracking-wider text-primary"
           >
             Tech Stack
           </motion.span>
@@ -108,7 +108,7 @@ export function TechStack() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-4 text-lg leading-relaxed text-muted-foreground font-light"
+            className="mt-4 text-xl leading-relaxed text-muted-foreground font-light"
           >
             A carefully selected stack optimized for speed, reliability, and
             developer experience.
@@ -135,7 +135,7 @@ export function TechStack() {
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/10 transition-all duration-300 group-hover:bg-primary/15 group-hover:ring-primary/20">
                     {Icon ? <Icon className="h-6 w-6" /> : null}
                   </div>
-                  <h3 className="text-base font-semibold tracking-tight text-foreground">
+                  <h3 className="text-lg font-semibold tracking-tight text-foreground">
                     {group.category}
                   </h3>
                 </div>
@@ -160,7 +160,7 @@ export function TechStack() {
             {[...tickerItems, ...tickerItems].map((label, i) => (
               <span
                 key={`${label}-${i}`}
-                className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground/60"
+                className="inline-flex items-center gap-2 text-base font-medium text-muted-foreground/60"
               >
                 {TICKER_ICONS[label] ? (
                   <img
