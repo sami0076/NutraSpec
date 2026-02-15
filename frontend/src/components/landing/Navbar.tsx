@@ -6,10 +6,8 @@ import { Link } from 'react-router-dom';
 import { useUser } from '@/context/UserContext';
 
 const navLinks = [
-  { label: 'Features', href: '#features' },
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Tech Stack', href: '#tech-stack' },
-  { label: 'About', href: '#about' },
 ];
 
 export function Navbar() {
@@ -42,10 +40,10 @@ export function Navbar() {
       initial={{ y: 0 }}
       animate={{ y: hidden ? -100 : 0 }}
       transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 border-b-2 border-border shadow-[0_4px_12px_rgba(0,0,0,0.06)] ${
         scrolled
-          ? 'bg-background/85 backdrop-blur-xl border-b border-border'
-          : 'bg-transparent border-b border-transparent'
+          ? 'bg-background/90 backdrop-blur-xl'
+          : 'bg-background/80 backdrop-blur-sm'
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
@@ -54,7 +52,7 @@ export function Navbar() {
             <Leaf className="h-5 w-5 text-primary-foreground" />
           </div>
           <span className="text-lg font-bold tracking-tight text-foreground">
-            FoodFinder<span className="text-primary">.AI</span>
+            NutraSpec
           </span>
         </Link>
 

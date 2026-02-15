@@ -56,7 +56,7 @@ export function Footer() {
                 <Leaf className="h-4 w-4 text-primary-foreground" />
               </div>
               <span className="text-base font-bold text-foreground">
-                FoodFinder<span className="text-primary">.AI</span>
+                NutraSpec
               </span>
             </motion.div>
             <motion.p
@@ -108,7 +108,7 @@ export function Footer() {
           className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-border/50 pt-8 md:flex-row"
         >
           <p className="text-sm text-muted-foreground">
-            &copy; 2026 FoodFinder.AI. Built at PatriotHacks.
+            &copy; 2026 NutraSpec. Built at PatriotHacks.
           </p>
           <div className="flex items-center gap-6">
             <a
