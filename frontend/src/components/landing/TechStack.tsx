@@ -1,6 +1,25 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 
+const ICON_CDN = 'https://cdn.simpleicons.org';
+
+/** Logo slug for Simple Icons CDN (cdn.simpleicons.org/slug). Fallback to first word if missing. */
+const TECH_ICONS: Record<string, string> = {
+  'React 19': 'react',
+  TypeScript: 'typescript',
+  Vite: 'vite',
+  'Tailwind CSS v4': 'tailwindcss',
+  'Lucide Icons': 'lucide',
+  'Python 3.11+': 'python',
+  FastAPI: 'fastapi',
+  Pydantic: 'pydantic',
+  Uvicorn: 'uvicorn',
+  'Google Gemini API': 'google',
+  'ElevenLabs TTS': 'elevenlabs',
+  'Supabase (PostgreSQL)': 'supabase',
+  'Custom Deterministic Engine': 'chartdotjs',
+};
+
 const techItems = [
   {
     category: 'Frontend',
@@ -28,6 +47,25 @@ const techItems = [
   },
 ];
 
+function TechBadge({ item }: { item: string }) {
+  const slug = TECH_ICONS[item];
+  const iconUrl = slug ? `${ICON_CDN}/${slug}` : null;
+  return (
+    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-sm font-medium text-foreground">
+      {iconUrl ? (
+        <img
+          src={iconUrl}
+          alt=""
+          className="h-4 w-4 shrink-0"
+          width={16}
+          height={16}
+        />
+      ) : null}
+      {item}
+    </span>
+  );
+}
+
 const tickerItems = [
   'React',
   'TypeScript',
@@ -42,6 +80,21 @@ const tickerItems = [
   'Pydantic',
   'Uvicorn',
 ];
+
+const TICKER_ICONS: Record<string, string> = {
+  React: 'react',
+  TypeScript: 'typescript',
+  'Tailwind CSS': 'tailwindcss',
+  FastAPI: 'fastapi',
+  Python: 'python',
+  'Google Gemini': 'google',
+  ElevenLabs: 'elevenlabs',
+  Supabase: 'supabase',
+  PostgreSQL: 'postgresql',
+  Vite: 'vite',
+  Pydantic: 'pydantic',
+  Uvicorn: 'uvicorn',
+};
 
 export function TechStack() {
   const gridRef = useRef<HTMLDivElement>(null);
@@ -104,12 +157,7 @@ export function TechStack() {
               </h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {group.items.map((item) => (
-                  <span
-                    key={item}
-                    className="inline-flex items-center rounded-full border border-border bg-background px-3 py-1 text-sm font-medium text-foreground"
-                  >
-                    {item}
-                  </span>
+                  <TechBadge key={item} item={item} />
                 ))}
               </div>
             </motion.div>
@@ -127,8 +175,17 @@ export function TechStack() {
             {[...tickerItems, ...tickerItems].map((label, i) => (
               <span
                 key={`${label}-${i}`}
-                className="text-sm font-medium text-muted-foreground/60"
+                className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground/60"
               >
+                {TICKER_ICONS[label] ? (
+                  <img
+                    src={`${ICON_CDN}/${TICKER_ICONS[label]}`}
+                    alt=""
+                    className="h-4 w-4 shrink-0 opacity-80"
+                    width={16}
+                    height={16}
+                  />
+                ) : null}
                 {label}
               </span>
             ))}

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Leaf, Save, Plus, X, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { useUser } from '@/context/UserContext';
 import { useUserProfile } from '@/hooks/useUserProfile';
 
@@ -196,7 +197,8 @@ export default function ProfileScreen() {
       </header>
 
       <div className="mx-auto max-w-3xl px-6 py-10">
-        <div className="flex items-center gap-3 mb-8">
+        <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Profile' }]} />
+        <div className="flex items-center gap-3 mt-4 mb-8">
           <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
             <User className="h-6 w-6 text-primary" />
           </div>

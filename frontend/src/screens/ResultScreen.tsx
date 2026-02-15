@@ -7,6 +7,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { ScoreCircle } from '@/components/ScoreCircle';
 import { RiskBadge } from '@/components/RiskBadge';
 import { ConflictList } from '@/components/ConflictList';
@@ -44,13 +45,21 @@ export default function ResultScreen() {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border/50 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-6 py-4">
-          <button
-            onClick={() => navigate('/scan')}
-            className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            <span className="text-sm font-medium">Scan Again</span>
-          </button>
+          <div className="flex items-center gap-4">
+            <Link
+              to="/"
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="text-sm font-medium">Home</span>
+            </Link>
+            <button
+              onClick={() => navigate('/scan')}
+              className="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
+            >
+              Scan Again
+            </button>
+          </div>
           <div className="flex items-center gap-2">
             <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary">
               <Leaf className="h-3.5 w-3.5 text-primary-foreground" />
@@ -69,8 +78,9 @@ export default function ResultScreen() {
       </header>
 
       <div className="mx-auto max-w-3xl px-6 py-10">
+        <Breadcrumbs items={[{ label: 'Home', to: '/' }, { label: 'Scan', to: '/scan' }, { label: 'Result' }]} />
         {/* 1. Product name (e.g. Lays, Pringles) */}
-        <div className="rounded-xl border border-border/60 bg-card p-6 mb-8">
+        <div className="mt-4 rounded-xl border border-border/60 bg-card p-6 mb-8">
           <h2 className="text-xs font-bold uppercase tracking-wider text-primary mb-2">
             Product
           </h2>

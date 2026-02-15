@@ -2,20 +2,42 @@ import { useState, useEffect, useCallback } from 'react';
 import { Leaf, LogOut, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useUser } from '@/context/UserContext';
 
 const navLinks = [
-  { label: 'How It Works', href: '#how-it-works' },
-  { label: 'Tech Stack', href: '#tech-stack' },
+  { label: 'How It Works', href: '#how-it-works', id: 'how-it-works' },
+  { label: 'Tech Stack', href: '#tech-stack', id: 'tech-stack' },
 ];
 
 export function Navbar() {
+  const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const { user, signOut } = useUser();
+
+  /* Active nav state: highlight section in view (landing only) */
+  useEffect(() => {
+    if (location.pathname !== '/') return;
+    const sections = navLinks.map((l) => document.getElementById(l.id)).filter(Boolean);
+    if (sections.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const id = entry.target.id;
+          setActiveSection(id);
+          break;
+        }
+      },
+      { rootMargin: '-20% 0px -60% 0px', threshold: 0 }
+    );
+    sections.forEach((el) => el && observer.observe(el));
+    return () => observer.disconnect();
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,16 +79,21 @@ export function Navbar() {
         </Link>
 
         <ul className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <li key={link.label}>
-              <a
-                href={link.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
+          {navLinks.map((link) => {
+            const isActive = location.pathname === '/' && activeSection === link.id;
+            return (
+              <li key={link.label}>
+                <a
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors hover:text-foreground ${
+                    isActive ? 'text-foreground font-semibold' : 'text-muted-foreground'
+                  }`}
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -154,17 +181,22 @@ export function Navbar() {
             className="overflow-hidden border-b border-border bg-background/95 backdrop-blur-xl md:hidden"
           >
             <ul className="flex flex-col gap-1 px-6 py-4">
-              {navLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="block rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
+              {navLinks.map((link) => {
+                const isActive = location.pathname === '/' && activeSection === link.id;
+                return (
+                  <li key={link.label}>
+                    <a
+                      href={link.href}
+                      className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-foreground ${
+                        isActive ? 'text-foreground font-semibold bg-accent/50' : 'text-muted-foreground'
+                      }`}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                );
+              })}
               <li className="mt-3 flex flex-col gap-2">
                 {user ? (
                   <>
