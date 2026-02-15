@@ -1,4 +1,4 @@
-# FoodFinder.AI
+# NutraSpec
 
 **AI-powered ingredient risk scoring.** Snap a photo of any food label, get a personalized safety analysis based on your allergies, dietary preferences, and health goals.
 
