@@ -84,29 +84,12 @@ app = FastAPI(
 )
 
 # ---------------------------------------------------------------------------
-# CORS — explicitly list allowed origins so preflight works reliably
+# CORS — allow all origins (credentials=False so wildcard is valid per spec)
 # ---------------------------------------------------------------------------
-_cors_origins = [
-    "https://food-finder-2gp8q3ls6-sami0076s-projects.vercel.app",
-    "https://food-finder-ai-six.vercel.app",
-    "http://localhost:5173",   # Vite dev server
-    "http://localhost:8000",   # local backend (for Swagger UI)
-]
-# Also pull from FRONTEND_URL env var (Vercel URL, ngrok URL, etc.)
-_extra = os.environ.get("FRONTEND_URL", "").strip().rstrip("/")
-if _extra and _extra not in _cors_origins:
-    _cors_origins.append(_extra)
-
-logger.info("CORS allowed origins: %s", _cors_origins)
-
-# Regex to also match any ngrok subdomain (URL changes each restart)
-_cors_regex = r"https://.*\.ngrok(-free)?\.app"
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=_cors_origins,
-    allow_origin_regex=_cors_regex,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD"],
     allow_headers=["*"],
     expose_headers=["*"],
