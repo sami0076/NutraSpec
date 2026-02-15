@@ -127,36 +127,6 @@ FoodFinder.AI/
         └── styles/
             ├── globalStyles.css   ← Tailwind v4 theme (white & orange)
             └── theme.ts
-```
-
----
-
-## Execution Flow
-
-```
-User snaps photo of ingredient label
-        ↓
-POST /analyze (image, include_audio, profile_json from frontend)
-        ↓
-gemini_service.analyze_vision(image) → product_name, brand, ingredients
-        ↓
-profile = get_user_profile(user_id from JWT) merged with profile_json
-        ↓
-allergen_check.check_allergens(ingredients, allergies) → deterministic flags
-        ↓
-cache_key = hash(ingredients + profile)
-        ↓
-[Cache hit?] → cached analysis + allergen_check + optional TTS
-[Cache miss] → gemini_service.analyze_ingredients(ingredients, profile)
-        ↓
-allergen_check.merge_allergen_flags(analysis, det_flags) → override if Gemini missed
-        ↓
-set_cached_analysis(cache_key, analysis)
-        ↓
-[include_audio=true?] → elevenlabs_service.text_to_speech(summary)
-        ↓
-Return AnalyzeResult → frontend displays results + plays audio
-```
 
 ---
 
@@ -208,31 +178,6 @@ npm run dev
 Open **http://localhost:5173** in your browser.
 
 > See [SETUP.md](./SETUP.md) for detailed instructions, mobile testing over LAN, and troubleshooting.
-
----
-
-## Implementation Status
-
-| Component                                              | Status |
-| ------------------------------------------------------ | ------ |
-| Backend (backend/) — FastAPI, routes, services          | Done   |
-| Gemini service (vision + analysis, retry on 429)       | Done   |
-| Deterministic allergen check (allergen_check.py)       | Done   |
-| Profile fallback (profile_json from frontend)           | Done   |
-| Analysis cache (Supabase)                              | Done   |
-| ElevenLabs TTS                                         | Done   |
-| User profile (GET/PUT /user/profile, auth via Supabase API) | Done   |
-| Database migrations (user_profiles, analysis_cache)      | Done   |
-| Frontend landing, scan, result, profile, auth screens   | Done   |
-
----
-
-## Database Schema
-
-Two tables in Supabase (PostgreSQL):
-
-- **user_profiles** — `user_id` (UUID PK), `allergies`, `dietary_restrictions`, `health_conditions`, `health_goals` (JSONB arrays)
-- **analysis_cache** — `cache_key` (text PK), `result` (JSONB)
 
 ---
 
