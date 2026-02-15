@@ -27,6 +27,8 @@ export async function apiFetch<T>(
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
   }
+  // Skip ngrok's browser interstitial warning (free tier)
+  headers.set('ngrok-skip-browser-warning', 'true');
 
   const res = await fetch(url, { ...init, headers });
 
@@ -48,7 +50,10 @@ export async function apiPostForm<T>(
 ): Promise<T> {
   const token = await getAccessToken();
 
-  const headers: Record<string, string> = {};
+  const headers: Record<string, string> = {
+    // Skip ngrok's browser interstitial warning (free tier)
+    'ngrok-skip-browser-warning': 'true',
+  };
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
