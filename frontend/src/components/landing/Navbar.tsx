@@ -13,9 +13,6 @@ const navLinks = [
 export function Navbar() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const { user, signOut } = useUser();
 
@@ -39,35 +36,13 @@ export function Navbar() {
     return () => observer.disconnect();
   }, [location.pathname]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > 80) setScrolled(true);
-      else setScrolled(false);
-      if (currentScrollY > lastScrollY && currentScrollY > 280) setHidden(true);
-      else setHidden(false);
-      setLastScrollY(currentScrollY);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
-
   const handleSignOut = useCallback(async () => {
     await signOut();
     setMobileOpen(false);
   }, [signOut]);
 
   return (
-    <motion.header
-      initial={{ y: 0 }}
-      animate={{ y: hidden ? -100 : 0 }}
-      transition={{ duration: 0.3, ease: 'easeInOut' }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 border-b-2 border-border shadow-[0_4px_12px_rgba(0,0,0,0.06)] ${
-        scrolled
-          ? 'bg-background/90 backdrop-blur-xl'
-          : 'bg-background/80 backdrop-blur-sm'
-      }`}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 nav-glass">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
@@ -257,6 +232,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   );
 }

@@ -1,9 +1,9 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { Monitor, Server, Sparkles, Database } from 'lucide-react';
 
 const ICON_CDN = 'https://cdn.simpleicons.org';
 
-/** Logo slug for Simple Icons CDN (cdn.simpleicons.org/slug). Fallback to first word if missing. */
 const TECH_ICONS: Record<string, string> = {
   'React 19': 'react',
   TypeScript: 'typescript',
@@ -17,49 +17,29 @@ const TECH_ICONS: Record<string, string> = {
   'Google Gemini API': 'google',
   'ElevenLabs TTS': 'elevenlabs',
   'Supabase (PostgreSQL)': 'supabase',
-  'Custom Deterministic Engine': 'chartdotjs',
+};
+
+const CATEGORY_ICONS = {
+  Frontend: Monitor,
+  Backend: Server,
+  'AI & Voice': Sparkles,
+  Database: Database,
 };
 
 const techItems = [
-  {
-    category: 'Frontend',
-    items: ['React 19', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'Lucide Icons'],
-  },
-  {
-    category: 'Backend',
-    items: ['Python 3.11+', 'FastAPI', 'Pydantic', 'Uvicorn'],
-  },
-  {
-    category: 'AI / Vision',
-    items: ['Google Gemini API'],
-  },
-  {
-    category: 'Voice',
-    items: ['ElevenLabs TTS'],
-  },
-  {
-    category: 'Database',
-    items: ['Supabase (PostgreSQL)'],
-  },
-  {
-    category: 'Scoring',
-    items: ['Custom Deterministic Engine'],
-  },
+  { category: 'Frontend', items: ['React 19', 'TypeScript', 'Vite', 'Tailwind CSS v4', 'Lucide Icons'] },
+  { category: 'Backend', items: ['Python 3.11+', 'FastAPI', 'Pydantic', 'Uvicorn'] },
+  { category: 'AI & Voice', items: ['Google Gemini API', 'ElevenLabs TTS'] },
+  { category: 'Database', items: ['Supabase (PostgreSQL)'] },
 ];
 
 function TechBadge({ item }: { item: string }) {
   const slug = TECH_ICONS[item];
   const iconUrl = slug ? `${ICON_CDN}/${slug}` : null;
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-sm font-medium text-foreground">
+    <span className="inline-flex items-center gap-1.5 rounded-lg border border-border/80 bg-background/80 px-2.5 py-1 text-xs font-medium text-foreground">
       {iconUrl ? (
-        <img
-          src={iconUrl}
-          alt=""
-          className="h-4 w-4 shrink-0"
-          width={16}
-          height={16}
-        />
+        <img src={iconUrl} alt="" className="h-3.5 w-3.5 shrink-0" width={14} height={14} />
       ) : null}
       {item}
     </span>
@@ -135,33 +115,38 @@ export function TechStack() {
           </motion.p>
         </div>
 
-        {/* Tech grid with useInView stagger */}
+        {/* 4 categories in a 2×2 grid — clear and balanced */}
         <div
           ref={gridRef}
-          className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 max-w-4xl mx-auto"
         >
-          {techItems.map((group, i) => (
-            <motion.div
-              key={group.category}
-              initial={{ opacity: 0, y: 40 }}
-              animate={gridInView ? { opacity: 1, y: 0 } : {}}
-              transition={{
-                duration: 0.5,
-                delay: i * 0.08,
-                ease: [0.33, 1, 0.68, 1],
-              }}
-              className="rounded-2xl border border-border/60 bg-card/60 p-6 backdrop-blur-sm transition-all hover:border-primary/30 hover:bg-card"
-            >
-              <h3 className="text-xs font-bold uppercase tracking-wider text-primary">
-                {group.category}
-              </h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {group.items.map((item) => (
-                  <TechBadge key={item} item={item} />
-                ))}
-              </div>
-            </motion.div>
-          ))}
+          {techItems.map((group, i) => {
+            const Icon = CATEGORY_ICONS[group.category as keyof typeof CATEGORY_ICONS];
+            return (
+              <motion.div
+                key={group.category}
+                initial={{ opacity: 0, y: 20 }}
+                animate={gridInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.33, 1, 0.68, 1] }}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-border/80 bg-card/80 px-7 py-7 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-full pointer-events-none" />
+                <div className="relative flex items-center gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-primary/10 transition-all duration-300 group-hover:bg-primary/15 group-hover:ring-primary/20">
+                    {Icon ? <Icon className="h-6 w-6" /> : null}
+                  </div>
+                  <h3 className="text-base font-semibold tracking-tight text-foreground">
+                    {group.category}
+                  </h3>
+                </div>
+                <div className="relative mt-5 flex flex-wrap gap-2">
+                  {group.items.map((item) => (
+                    <TechBadge key={item} item={item} />
+                  ))}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Auto-sliding horizontal ticker (seamless loop) */}
