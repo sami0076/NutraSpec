@@ -55,30 +55,42 @@ export function CameraView({ stream, onCapture, onFileSelect, onClose }: CameraV
   );
 
   return (
-    <div className="relative flex flex-col items-center gap-6">
-      {/* Video feed */}
-      <div className="relative w-full max-w-lg overflow-hidden rounded-2xl border border-border/60 bg-black">
-        {stream ? (
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            className="w-full"
-          />
-        ) : (
-          <div className="flex h-64 items-center justify-center text-muted-foreground">
-            <p className="text-sm">Camera not available</p>
-          </div>
-        )}
+    <div className="relative flex flex-col items-center gap-3 w-full">
+      {/* Glass border wrapper */}
+      <div
+        className="relative w-full h-[65vh] rounded-2xl p-1.5"
+        style={{
+          background: 'linear-gradient(135deg, rgba(255,255,255,0.35), rgba(255,255,255,0.08))',
+          backdropFilter: 'blur(12px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+          boxShadow: '0 8px 32px rgba(31,38,135,0.12), inset 0 1px 1px rgba(255,255,255,0.35)',
+          border: '1px solid rgba(255,255,255,0.25)',
+        }}
+      >
+        {/* Inner video container */}
+        <div className="relative w-full h-full rounded-xl overflow-hidden bg-black">
+          {stream ? (
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              muted
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+          ) : (
+            <div className="flex h-64 items-center justify-center text-muted-foreground">
+              <p className="text-sm">Camera not available</p>
+            </div>
+          )}
 
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm"
-        >
-          <X className="h-4 w-4" />
-        </button>
+          {/* Close button */}
+          <button
+            onClick={onClose}
+            className="absolute top-3 right-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
       </div>
 
       {/* Hidden canvas for capture */}
@@ -89,11 +101,11 @@ export function CameraView({ stream, onCapture, onFileSelect, onClose }: CameraV
       </p>
 
       {/* Action buttons */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 flex-shrink-0">
         {stream && (
           <Button
             onClick={handleCapture}
-            className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-base font-semibold gap-2"
+            className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3 text-base font-semibold gap-2"
           >
             <Camera className="h-5 w-5" />
             Capture
@@ -103,7 +115,7 @@ export function CameraView({ stream, onCapture, onFileSelect, onClose }: CameraV
         <Button
           variant="outline"
           onClick={() => fileInputRef.current?.click()}
-          className="rounded-full px-6 py-6 text-base font-semibold gap-2 border-border text-foreground hover:bg-accent"
+          className="rounded-full px-6 py-3 text-base font-semibold gap-2 border-border text-foreground hover:bg-accent"
         >
           <Upload className="h-5 w-5" />
           Upload Photo

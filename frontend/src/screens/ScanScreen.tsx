@@ -53,7 +53,7 @@ export default function ScanScreen() {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen flex flex-col bg-background">
       {loading && <LoadingOverlay />}
 
       {/* Header */}
@@ -80,7 +80,7 @@ export default function ScanScreen() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-3xl px-6 py-12">
+      <div className={cameraActive ? 'flex-1 flex flex-col min-h-0 px-4 py-2' : 'mx-auto max-w-3xl px-6 py-12'}>
         {!cameraActive ? (
           /* Landing state — prompt to scan */
           <div className="flex flex-col items-center text-center">
