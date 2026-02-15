@@ -66,7 +66,7 @@ export function CTA() {
                 </Button>
               </Link>
               <a
-                href="https://github.com"
+                href="https://github.com/sami0076/NutraSpec"
                 target="_blank"
                 rel="noopener noreferrer"
               >
