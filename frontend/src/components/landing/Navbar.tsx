@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Leaf, LogOut } from 'lucide-react';
+import { Leaf, LogOut, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -75,13 +75,16 @@ export function Navbar() {
               <span className="text-sm text-muted-foreground truncate max-w-[160px]">
                 {user.email}
               </span>
-              <button
-                onClick={handleSignOut}
-                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <LogOut className="h-4 w-4" />
-                Sign Out
-              </button>
+              <Link to="/profile">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center gap-1.5 text-muted-foreground hover:text-foreground"
+                >
+                  <User className="h-4 w-4" />
+                  Profile
+                </Button>
+              </Link>
               <Link to="/scan">
                 <Button
                   size="sm"
@@ -90,6 +93,13 @@ export function Navbar() {
                   Scan
                 </Button>
               </Link>
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <LogOut className="h-4 w-4" />
+                Sign Out
+              </button>
             </>
           ) : (
             <>
@@ -161,6 +171,24 @@ export function Navbar() {
                     <span className="px-3 text-sm text-muted-foreground truncate">
                       {user.email}
                     </span>
+                    <Link to="/profile" onClick={() => setMobileOpen(false)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="justify-start text-muted-foreground w-full"
+                      >
+                        <User className="h-4 w-4 mr-1.5" />
+                        Profile
+                      </Button>
+                    </Link>
+                    <Link to="/scan" onClick={() => setMobileOpen(false)}>
+                      <Button
+                        size="sm"
+                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full w-full"
+                      >
+                        Scan
+                      </Button>
+                    </Link>
                     <Button
                       variant="ghost"
                       size="sm"
@@ -170,14 +198,6 @@ export function Navbar() {
                       <LogOut className="h-4 w-4 mr-1.5" />
                       Sign Out
                     </Button>
-                    <Link to="/scan" onClick={() => setMobileOpen(false)}>
-                      <Button
-                        size="sm"
-                        className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full w-full"
-                      >
-                        Scan
-                      </Button>
-                    </Link>
                   </>
                 ) : (
                   <>
